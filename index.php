@@ -131,9 +131,9 @@ $tasks = [
 
                 <table class="tasks">
                     <? foreach ($tasks as $key => $val): ?>
+                    <? if ($val['is_done'] && $show_complete_tasks === 1): ?>
 
-
-                        <tr class="tasks__item task">
+                    <tr class="tasks__item task">
                             <td class="task__select">
                                 <label class="checkbox task__checkbox">
                                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox"
@@ -148,11 +148,9 @@ $tasks = [
 
                             <td class="task__date"><?= $val['date']; ?></td>
                         </tr>
+                    <? endif; endforeach; ?>
 
-
-
-                    <? endforeach; ?>
-                    <? if ($val['is_done'] && $show_complete_tasks === 1): ?>
+                    <? if ($show_complete_tasks === 1): ?>
                         <tr class="tasks__item task task--completed">
                             <td class="task__select">
                                 <label class="checkbox task__checkbox">
