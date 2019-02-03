@@ -2,7 +2,7 @@
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 // создание массива для проектов
-$projects  = ["Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
+$projects = ["Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
 // создание массива для задач
 $tasks = [
     0 => [
@@ -131,24 +131,25 @@ $tasks = [
 
                 <table class="tasks">
                     <? foreach ($tasks as $key => $val): ?>
-                    <? if ($val['is_done'] && $show_complete_tasks === 1): ?>
+                        <? if ($val['is_done'] && $show_complete_tasks === 1): ?>
 
-                    <tr class="tasks__item task">
-                            <td class="task__select">
-                                <label class="checkbox task__checkbox">
-                                    <input class="checkbox__input visually-hidden task__checkbox" type="checkbox"
-                                           value="1">
-                                    <span class="checkbox__text"><?= $val['task']; ?></span>
-                                </label>
-                            </td>
+                            <tr class="tasks__item task">
+                                <td class="task__select">
+                                    <label class="checkbox task__checkbox">
+                                        <input class="checkbox__input visually-hidden task__checkbox <? if ($val['is_done'] == true): ?>task--completed<? endif ?>"
+                                               type="checkbox"
+                                               value="1">
+                                        <span class="checkbox__text"><?= $val['task']; ?></span>
+                                    </label>
+                                </td>
 
-                            <td class="task__file">
-                                <a class="download-link" href="#">Home.psd</a>
-                            </td>
+                                <td class="task__file">
+                                    <a class="download-link" href="#">Home.psd</a>
+                                </td>
 
-                            <td class="task__date"><?= $val['date']; ?></td>
-                        </tr>
-                    <? endif; endforeach; ?>
+                                <td class="task__date"><?= $val['date']; ?></td>
+                            </tr>
+                        <? endif; endforeach; ?>
 
                     <? if ($show_complete_tasks === 1): ?>
                         <tr class="tasks__item task task--completed">
