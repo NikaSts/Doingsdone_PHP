@@ -9,39 +9,41 @@ $tasks = [
         'task' => 'Собеседование в IT компании',
         'date' => '01.12.2019',
         'project' => 'Работа',
-        'done' => 'false'
+        'is_done' => 'false'
     ],
     1 => [
         'task' => 'Выполнить тестовое задание',
         'date' => '25.12.2019',
         'project' => 'Работа',
-        'done' => 'false'
+        'is_done' => 'false'
     ],
     2 => [
         'task' => 'Сделать задание первого раздела',
         'date' => '21.12.2019',
         'project' => 'Учеба',
-        'done' => 'true'
+        'is_done' => 'true'
     ],
     3 => [
         'task' => 'Встреча с другом',
         'date' => '22.12.2019',
         'project' => 'Входящие',
-        'done' => 'false'
+        'is_done' => 'false'
     ],
     4 => [
         'task' => 'Купить корм для кота',
         'date' => '',
         'project' => 'Домашние дела',
-        'done' => 'false'
+        'is_done' => 'false'
     ],
     5 => [
         'task' => 'Заказать пиццу',
         'date' => '',
         'project' => 'Домашние дела',
-        'done' => 'false'
+        'is_done' => 'false'
     ]
 ];
+//
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -129,12 +131,13 @@ $tasks = [
 
                 <table class="tasks">
                     <?php foreach ($tasks as $key => $val): ?>
+                    <?php if ($val['is_done'] && $show_complete_tasks): ?>
+                    <?php elseif (!$item['is_done']) : ?>
                         <tr class="tasks__item task">
                             <td class="task__select">
                                 <label class="checkbox task__checkbox">
                                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox"
-                                           value="1"
-                                        <?= in_array(true, $val) ? 'checked' : '' ?>>
+                                           value="1">
                                     <span class="checkbox__text"><?= $val['task']; ?></span>
                                 </label>
                             </td>
@@ -145,8 +148,10 @@ $tasks = [
 
                             <td class="task__date"><?= $val['date']; ?></td>
                         </tr>
-                        <!--показывать следующий тег <tr/>, если переменная $show_complete_tasks равна единице-->
-                    <?php endforeach; ?>
+
+
+
+                    <?php endif; endforeach; ?>
                     <? if ($show_complete_tasks === 1): ?>
                         <tr class="tasks__item task task--completed">
                             <td class="task__select">
