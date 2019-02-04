@@ -9,37 +9,37 @@ $tasks = [
         'task' => 'Собеседование в IT компании',
         'date' => '01.12.2019',
         'project' => 'Работа',
-        'is_done' => 'false'
+        'is_done' => false
     ],
     1 => [
         'task' => 'Выполнить тестовое задание',
         'date' => '25.12.2019',
         'project' => 'Работа',
-        'is_done' => 'false'
+        'is_done' => false
     ],
     2 => [
         'task' => 'Сделать задание первого раздела',
         'date' => '21.12.2019',
         'project' => 'Учеба',
-        'is_done' => 'true'
+        'is_done' => true
     ],
     3 => [
         'task' => 'Встреча с другом',
         'date' => '22.12.2019',
         'project' => 'Входящие',
-        'is_done' => 'false'
+        'is_done' => false
     ],
     4 => [
         'task' => 'Купить корм для кота',
         'date' => '',
         'project' => 'Домашние дела',
-        'is_done' => 'false'
+        'is_done' => false
     ],
     5 => [
         'task' => 'Заказать пиццу',
         'date' => '',
         'project' => 'Домашние дела',
-        'is_done' => 'false'
+        'is_done' => false
     ]
 ];
 ?>
