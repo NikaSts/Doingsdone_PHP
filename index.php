@@ -42,6 +42,19 @@ $tasks = [
         'is_done' => false
     ]
 ];
+
+// создание функции для подсчета задач у каждого из проектов
+function calculate_amount($tasks, $project)
+{
+    $amount = 0;
+    foreach ($tasks as $value) {
+        if ($value['project'] == $project) {
+            $amount++;
+        }
+    }
+    return $amount;
+}
+
 ?>
 
 
@@ -93,7 +106,7 @@ $tasks = [
                         <? foreach ($projects as $key => $val): ?>
                             <li class="main-navigation__list-item">
                                 <a class="main-navigation__list-item-link" href="#"><?= $val ?></a>
-                                <span class="main-navigation__list-item-count">0</span>
+                                <span class="main-navigation__list-item-count"><?= calculate_amount($tasks, $val) ?></span>
                             </li>
                         <? endforeach; ?>
                     </ul>
@@ -124,7 +137,7 @@ $tasks = [
 
                         <!--добавить сюда аттрибут "checked", если переменная $show_complete_tasks равна единице-->
                         <input class="checkbox__input visually-hidden show_completed" type="checkbox"
-                            <?=$show_complete_tasks === 1?'checked':''?>
+                            <?= $show_complete_tasks === 1 ? 'checked' : '' ?>
                         >
 
                         <span class="checkbox__text">Показывать выполненные</span>
@@ -135,7 +148,7 @@ $tasks = [
                     <? foreach ($tasks as $key => $val): ?>
                         <? if (!$val['is_done'] || $show_complete_tasks === 1): ?>
 
-                            <tr class="tasks__item task <?= $val['is_done']? "task--completed": '' ?>">
+                            <tr class="tasks__item task <?= $val['is_done'] ? "task--completed" : '' ?>">
                                 <td class="task__select">
                                     <label class="checkbox task__checkbox">
                                         <input class="checkbox__input visually-hidden task__checkbox"
