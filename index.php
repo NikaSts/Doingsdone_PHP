@@ -48,7 +48,7 @@ function calculate_amount($tasks, $project)
 {
     $amount = 0;
     foreach ($tasks as $value) {
-        if (!isset($value['project'])) {
+        if (isset($value['project'])) {
             if ($value['project'] === $project) {
                 $amount++;
             }
