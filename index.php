@@ -43,25 +43,20 @@ $tasks = [
     ]
 ];
 
-// создание функции для подсчета задач у каждого из проектов
-function calculate_amount($tasks, $project)
-{
-    $amount = 0;
-    foreach ($tasks as $value) {
-        if (isset($value['project'])) {
-            if ($value['project'] === $project) {
-                $amount++;
-            }
-        }
-    }
-    return $amount;
-}
-
-$page_name = '';
-$page_content = '';
-
-include(__DIR__ . '/templates/layout.php');
 
 include(__DIR__ . '/functions.php');
+
+
+$page_content = include_template('index.php', [
+    'show_complete_tasks' => $show_complete_tasks,
+    'tasks' => $tasks
+]);
+$layout_content = include_template('layout.php', [
+    'page_content' => $page_content,
+    'projects' => $projects,
+    'tasks' => $tasks,
+    'page_name' => 'проект Дела в порядке'
+]);
+print($layout_content);
 
 ?>

@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?= $page_name ?></title>
-    <link rel="stylesheet" href="../css/normalize.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/flatpickr.min.css">
+    <title><?= $page_name; ?></title>
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/flatpickr.min.css">
 </head>
 
 <body>
@@ -16,16 +16,16 @@
     <div class="container container--with-sidebar">
         <header class="main-header">
             <a href="/">
-                <img src="../img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
+                <img src="/img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
 
             <div class="main-header__side">
-                <a class="main-header__side-item button button--plus open-modal" href="../pages/form-task.html">Добавить
+                <a class="main-header__side-item button button--plus open-modal" href="/pages/form-task.html">Добавить
                     задачу</a>
 
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__image">
-                        <img src="../img/user.png" width="40" height="40" alt="Пользователь">
+                        <img src="/img/user.png" width="40" height="40" alt="Пользователь">
                     </div>
 
                     <div class="user-menu__data">
@@ -53,11 +53,11 @@
                 </nav>
 
                 <a class="button button--transparent button--plus content__side-button"
-                   href="../pages/form-project.html" target="project_add">Добавить проект</a>
+                   href="/pages/form-project.html" target="project_add">Добавить проект</a>
             </section>
 
             <main class="content__main">
-                <?= $page_content ?>
+                <?= $page_content; ?>
             </main>
         </div>
     </div>
@@ -70,7 +70,7 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
-        <a class="main-footer__button button button--plus" href="../pages/form-task.html">Добавить задачу</a>
+        <a class="main-footer__button button button--plus" href="/pages/form-task.html">Добавить задачу</a>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
@@ -115,13 +115,13 @@
             <span class="visually-hidden">Разработано:</span>
 
             <a href="https://htmlacademy.ru/intensive/php">
-                <img src="../img/htmlacademy.svg" alt="HTML Academy" width="118" height="40">
+                <img src="/img/htmlacademy.svg" alt="HTML Academy" width="118" height="40">
             </a>
         </div>
     </div>
 </footer>
 
-<script src="../flatpickr.js"></script>
-<script src="../script.js"></script>
+<script src="/flatpickr.js"></script>
+<script src="/script.js"></script>
 </body>
 </html>
