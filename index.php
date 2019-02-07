@@ -55,8 +55,8 @@ $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
     'projects' => $projects,
     'tasks' => $tasks,
-    'page_name' => 'проект Дела в порядке'
+    'page_name' => 'Дела в порядке'
 ]);
 print($layout_content);
 
-?>
+
