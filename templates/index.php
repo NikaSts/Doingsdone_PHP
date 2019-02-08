@@ -30,7 +30,7 @@
         <? foreach ($tasks as $key => $val): ?>
             <? if (!$val['is_done'] || $show_complete_tasks === 1): ?>
 
-                <tr class="tasks__item task <?= $val['is_done'] ? "task--completed" : '' ?>">
+                <tr class="tasks__item task <?= $val['is_done'] ? " task--completed" : '' ?><?= time_counter($val['date']) === true ? " task--important" : '' ?>">
                     <td class="task__select">
                         <label class="checkbox task__checkbox">
                             <input class="checkbox__input visually-hidden task__checkbox"
