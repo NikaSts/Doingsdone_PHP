@@ -40,7 +40,7 @@ function time_counter($date)
     if ($date === '') {
         return false;
     }
-    $time_left = floor(strtotime(($date) - time()) / 3600);
+    $time_left = floor((strtotime($date) - time()) / 3600);
     if ($time_left <= 24) {
         return true;
     } else {
