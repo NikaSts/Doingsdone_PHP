@@ -1,4 +1,5 @@
-<?
+<?php
+
 // создание функции-шаблонизатора
 function include_template($name, $data)
 {
@@ -34,7 +35,6 @@ function calculate_amount($tasks, $project)
 }
 
 //функция расчета времени до запланированного задания
-
 function time_counter($date)
 {
     if ($date === '') {

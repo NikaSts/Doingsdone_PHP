@@ -47,7 +47,6 @@ $tasks = [
     ]
 ];
 
-
 $page_content = include_template('index.php', [
     'show_complete_tasks' => $show_complete_tasks,
     'tasks' => $tasks
@@ -57,7 +56,7 @@ $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
     'projects' => $projects,
     'tasks' => $tasks,
-    'page_name' => 'проект Дела в порядке'
+    'title' => 'Дела в порядке'
 ]);
 print($layout_content);
 
