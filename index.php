@@ -7,7 +7,7 @@ $projects = ["Входящие", "Учеба", "Работа", "Домашние
 $tasks = [
     0 => [
         'task' => 'Собеседование в IT компании',
-        'date' => '01.12.2019',
+        'date' => '09.12.2019',
         'project' => 'Работа',
         'is_done' => false
     ],
@@ -59,4 +59,8 @@ $layout_content = include_template('layout.php', [
 ]);
 print($layout_content);
 
-?>
+// вызов функции
+$time_left  = time_counter ([
+    'date' => $date
+]);
+
