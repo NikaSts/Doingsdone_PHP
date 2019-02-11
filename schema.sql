@@ -28,9 +28,8 @@ CREATE TABLE tasks (
 CREATE INDEX users_signed_up ON users (signed_up);
 CREATE UNIQUE INDEX users_email ON users (email);
 CREATE UNIQUE INDEX users_name ON users (name);
-CREATE INDEX users_password ON users (password);
 CREATE INDEX tasks_name ON tasks (name);
-CREATE UNIQUE INDEX projects_name ON projects (name);
+CREATE INDEX projects_name ON projects (name);
 CREATE INDEX tasks_now_status ON tasks (now_status);
 CREATE INDEX tasks_time_limit ON tasks (time_limit);
 CREATE INDEX tasks_is_created ON tasks (is_created);
