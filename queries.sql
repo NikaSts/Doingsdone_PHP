@@ -8,12 +8,12 @@ INSERT INTO projects VALUES (NULL, 'Работа', 3);
 INSERT INTO projects VALUES (NULL, 'Домашние дела', 2);
 INSERT INTO projects VALUES (NULL, 'Авто', 3);
 
-INSERT INTO tasks VALUES (NULL, 'Собеседование в IT компании', 3, NULL, NULL, '2019-12-01 23:59:59', now(), NULL, 3);
-INSERT INTO tasks VALUES (NULL, 'Выполнить тестовое задание', 3, NULL, NULL, '2019-12-25 23:59:59', now(), NULL, 3);
-INSERT INTO tasks VALUES (NULL, 'Сделать задание первого раздела', 2, NULL, NULL, '2019-12-21 23:59:59', now(), NULL, 1);
-INSERT INTO tasks VALUES (NULL, 'Встреча с другом', 1, NULL, NULL, '2019-12-22 23:59:59', now(), NULL, 1);
-INSERT INTO tasks VALUES (NULL, 'Купить корм для кота', 4, NULL, NULL, NULL, now(), NULL, 2);
-INSERT INTO tasks VALUES (NULL, 'Заказать пиццу', 4, NULL, NULL, NULL, now(), NULL, 2);
+INSERT INTO tasks VALUES (NULL, 'Собеседование в IT компании', 3, '0', NULL, '2019-12-01 23:59:59', now(), NULL, 3);
+INSERT INTO tasks VALUES (NULL, 'Выполнить тестовое задание', 3, '0', NULL, '2019-12-25 23:59:59', now(), NULL, 3);
+INSERT INTO tasks VALUES (NULL, 'Сделать задание первого раздела', 2, '0', NULL, '2019-12-21 23:59:59', now(), NULL, 1);
+INSERT INTO tasks VALUES (NULL, 'Встреча с другом', 1, '0', NULL, '2019-12-22 23:59:59', now(), NULL, 1);
+INSERT INTO tasks VALUES (NULL, 'Купить корм для кота', 4, '0', NULL, NULL, now(), NULL, 2);
+INSERT INTO tasks VALUES (NULL, 'Заказать пиццу', 4, '0', NULL, NULL, now(), NULL, 2);
 
 
 -- получить список из всех проектов для пользователя Momentos

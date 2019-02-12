@@ -6,7 +6,7 @@ CREATE TABLE users (
   id        INT AUTO_INCREMENT PRIMARY KEY,
   signed_up DATETIME DEFAULT current_timestamp NOT NULL,
   email     CHAR(128) NOT NULL UNIQUE,
-  name      CHAR(64) NOT NULL UNIQUE,
+  name      CHAR(64) NOT NULL,
   password  CHAR(64) NOT NULL
 );
 CREATE TABLE projects (
@@ -25,9 +25,8 @@ CREATE TABLE tasks (
   is_done    DATETIME,
   user_id    INT NOT NULL
 );
-CREATE INDEX users_signed_up ON users (signed_up);
 CREATE UNIQUE INDEX users_email ON users (email);
-CREATE UNIQUE INDEX users_name ON users (name);
+CREATE INDEX users_name ON users (name);
 CREATE INDEX tasks_name ON tasks (name);
 CREATE INDEX projects_name ON projects (name);
 CREATE INDEX tasks_now_status ON tasks (now_status);
