@@ -11,7 +11,7 @@ $projects = ["Входящие", "Учеба", "Работа", "Домашние
 $tasks = [
     0 => [
         'task' => 'Собеседование в IT компании',
-        'date' => '09.02.2019',
+        'date' => '01.12.2019',
         'project' => $projects[2],
         'is_done' => false
     ],
@@ -35,18 +35,17 @@ $tasks = [
     ],
     4 => [
         'task' => 'Купить корм для кота',
-        'date' => '',
+        'date' => NULL,
         'project' => $projects[3],
         'is_done' => false
     ],
     5 => [
         'task' => 'Заказать пиццу',
-        'date' => '',
+        'date' => NULL,
         'project' => $projects[3],
         'is_done' => false
     ]
 ];
-
 
 $page_content = include_template('index.php', [
     'show_complete_tasks' => $show_complete_tasks,
@@ -57,7 +56,7 @@ $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
     'projects' => $projects,
     'tasks' => $tasks,
-    'page_name' => 'проект Дела в порядке'
+    'title' => 'Дела в порядке'
 ]);
 print($layout_content);
 
