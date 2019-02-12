@@ -17,7 +17,7 @@ INSERT INTO tasks VALUES (NULL, 'Заказать пиццу', 4, NULL, NULL, NU
 
 
 -- получить список из всех проектов для пользователя Grosss
-SELECT * FROM projects WHERE useres_name = 'Grosss';
+SELECT * FROM projects WHERE users_name = 'Grosss';
 
 -- получить список из всех задач для проекта 'Входящие';
 SELECT * FROM tasks WHERE projects_id = 3;
