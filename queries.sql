@@ -16,7 +16,7 @@ INSERT INTO tasks VALUES (NULL, 'Купить корм для кота', 4, NULL
 INSERT INTO tasks VALUES (NULL, 'Заказать пиццу', 4, NULL, NULL, NULL, now(), NULL, 2);
 
 
--- получить список из всех проектов для пользователя Grosss
+-- получить список из всех проектов для пользователя Momentos
 SELECT * FROM projects WHERE user_id = 3;
 
 -- получить список из всех задач для проекта 'Входящие';
