@@ -1,6 +1,6 @@
-INSERT INTO users VALUES (NULL, 'now()', 'babai@mail.ru', 'Babai', '1234abcd');
-INSERT INTO users VALUES (NULL, 'now()', 'grosss@mail.ru', 'Grosss', '54aa31a');
-INSERT INTO users VALUES (NULL, 'now()', 'momentos@mail.ru', 'Momentos', '564738ac');
+INSERT INTO users VALUES (NULL, now(), 'babai@mail.ru', 'Babai', '1234abcd');
+INSERT INTO users VALUES (NULL, now(), 'grosss@mail.ru', 'Grosss', '54aa31a');
+INSERT INTO users VALUES (NULL, now(), 'momentos@mail.ru', 'Momentos', '564738ac');
 
 INSERT INTO projects VALUES (NULL, 'Входящие', 1);
 INSERT INTO projects VALUES (NULL, 'Учеба', 1);
@@ -17,10 +17,10 @@ INSERT INTO tasks VALUES (NULL, 'Заказать пиццу', 4, NULL, NULL, NU
 
 
 -- получить список из всех проектов для пользователя Grosss
-SELECT * FROM projects WHERE users_name = 'Grosss';
+SELECT * FROM projects WHERE user_id = 3;
 
 -- получить список из всех задач для проекта 'Входящие';
-SELECT * FROM tasks WHERE projects_id = 3;
+SELECT * FROM tasks WHERE project_id = 1;
 
 -- пометить задачу 'Встреча с другом' как выполненную
 UPDATE tasks SET now_status = 1 WHERE id = 4;
