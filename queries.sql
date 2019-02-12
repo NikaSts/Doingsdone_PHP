@@ -24,3 +24,6 @@ SELECT * FROM tasks WHERE project_id = 1;
 
 -- пометить задачу 'Встреча с другом' как выполненную
 UPDATE tasks SET now_status = 1 WHERE id = 4;
+
+-- обновить название задачи 'Купить корм для кота' по её идентификатору
+UPDATE tasks SET name = 'Купить диван' WHERE id = 5;
