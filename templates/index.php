@@ -30,7 +30,7 @@
         <? foreach ($tasks as $key => $val): ?>
             <? if (!$val['is_done'] || $show_complete_tasks === 1): ?>
 
-                <tr class="tasks__item task <?= $val['is_done'] ? " task--completed" : '' ?><?= time_counter($val['date']) === true ? " task--important" : '' ?>">
+                <tr class="tasks__item task <?= $val['is_done'] ? " task--completed" : '' ?><?= time_counter($val['time_limit']) === true ? " task--important" : '' ?>">
                     <td class="task__select">
                         <label class="checkbox task__checkbox">
                             <input class="checkbox__input visually-hidden task__checkbox"
@@ -44,7 +44,7 @@
                         <a class="download-link" href="#">Home.psd</a>
                     </td>
 
-                    <td class="task__date"><?= $val['date']; ?></td>
+                    <td class="task__date"><?= $val['time_limit']; ?></td>
                 </tr>
 
 
