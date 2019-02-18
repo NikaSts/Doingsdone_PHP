@@ -44,7 +44,7 @@
                         <a class="download-link" href="#">Home.psd</a>
                     </td>
 
-                    <td class="task__date"><?= $val['time_limit']; ?></td>
+                    <td class="task__date"><?= date('d.m.y', strtotime($val['time_limit'])); ?></td>
                 </tr>
 
 

@@ -1,5 +1,7 @@
 <?php
 
+require_once 'mysql_helper.php';
+
 // создание функции-шаблонизатора
 function include_template($name, $data)
 {
@@ -47,8 +49,6 @@ function time_counter($date)
         return false;
     }
 }
-
-
 
 //функция для чтения записей из БД
 function db_fetch_data($connect, $sql, $data = [])
