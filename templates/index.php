@@ -36,7 +36,7 @@
                             <input class="checkbox__input visually-hidden task__checkbox"
                                    type="checkbox"
                                    value="1">
-                            <span class="checkbox__text"><?= htmlspecialchars($val['task']); ?></span>
+                            <span class="checkbox__text"><?= htmlspecialchars($val['name']); ?></span>
                         </label>
                     </td>
 
@@ -44,7 +44,7 @@
                         <a class="download-link" href="#">Home.psd</a>
                     </td>
 
-                    <td class="task__date"><?= date('d.m.y', strtotime($val['time_limit'])); ?></td>
+                    <td class="task__date"><?= $val['time_limit'] ? date('d.m.Y', strtotime($val['time_limit'])) : ''; ?></td>
                 </tr>
 
 

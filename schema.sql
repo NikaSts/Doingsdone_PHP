@@ -19,7 +19,7 @@ CREATE TABLE projects
 CREATE TABLE tasks
 (
   id         INT AUTO_INCREMENT PRIMARY KEY,
-  task       CHAR(128) NOT NULL,
+  name       CHAR(128) NOT NULL,
   project_id INT,
   now_status ENUM ('0', '1') DEFAULT '0',
   file_link  CHAR,
@@ -31,7 +31,7 @@ CREATE TABLE tasks
 CREATE UNIQUE INDEX users_email ON users (email);
 CREATE INDEX users_name ON users (name);
 CREATE INDEX projects_name ON projects (name);
-CREATE INDEX tasks_name ON tasks (task);
+CREATE INDEX tasks_name ON tasks (name);
 CREATE INDEX tasks_now_status ON tasks (now_status);
 CREATE INDEX tasks_time_limit ON tasks (time_limit);
 CREATE INDEX tasks_is_created ON tasks (is_created);
