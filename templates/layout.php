@@ -45,7 +45,7 @@
                     <ul class="main-navigation__list">
                         <? foreach ($projects as $key => $val): ?>
                             <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link" href="#"><?= $val['name']; ?></a>
+                                <a class="main-navigation__list-item-link" href="/index.php?project_id=<?= $val['id'] ?>"><?= $val['name']; ?></a>
                                 <span class="main-navigation__list-item-count"><?= calculate_amount($tasks, $val['id']); ?></span>
                             </li>
                         <? endforeach; ?>

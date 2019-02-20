@@ -28,6 +28,10 @@
 
     <table class="tasks">
         <? foreach ($tasks as $key => $val): ?>
+            <? if (($project_id = intval($_GET['project_id'])) && ($val['project_id'] != $project_id)) {
+                continue;
+            }
+            ?>
             <? if (!$val['is_done'] || $show_complete_tasks === 1): ?>
 
                 <tr class="tasks__item task <?= $val['is_done'] ? " task--completed" : '' ?><?= time_counter($val['time_limit']) === true ? " task--important" : '' ?>">

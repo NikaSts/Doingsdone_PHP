@@ -64,7 +64,8 @@ function db_fetch_data($connect, $sql, $data = [])
 }
 
 //Функция для добавления записей в БД
-function db_insert_data($connect, $sql, $data = []) {
+function db_insert_data($connect, $sql, $data = [])
+{
     $stmt = db_get_prepare_stmt($connect, $sql, $data);
     $result = mysqli_stmt_execute($stmt);
     if ($result) {
