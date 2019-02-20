@@ -21,23 +21,26 @@ if (!$connect) {
 
     if (isset($_GET['project_id']) && !$project_id) {
         $error = '404';
+        http_response_code(404);
     } else if ($project_id) {
         $sql_tasks_count = "SELECT COUNT(*) as count FROM tasks WHERE user_id = ? AND project_id = ?";
         $task_count = db_fetch_data($connect, $sql_tasks_count, [$user_id, $project_id]);
         if (!$task_count[0]['count']) {
             $error = '404';
+            http_response_code(404);
         }
     }
-    if ($error) {
-        $page_content = include_template('error.php', [
-            'error' => $error
-        ]);
-    } else {
-        $page_content = include_template('index.php', [
-            'show_complete_tasks' => $show_complete_tasks,
-            'tasks' => $tasks
-        ]);
-    }
+}
+
+if ($error) {
+    $page_content = include_template('error.php', [
+        'error' => $error
+    ]);
+} else {
+    $page_content = include_template('index.php', [
+        'show_complete_tasks' => $show_complete_tasks,
+        'tasks' => $tasks
+    ]);
 }
 
 
