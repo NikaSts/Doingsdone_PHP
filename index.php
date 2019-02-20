@@ -30,20 +30,18 @@ if (!$connect) {
             $error = '404';
         }
     }
+    if ($error) {
+        $page_content = include_template('error.php', [
+            'error' => $error
+        ]);
+    } else {
+        $page_content = include_template('index.php', [
+            'show_complete_tasks' => $show_complete_tasks,
+            'tasks' => $tasks
+        ]);
+    }
 }
 
-if ($error) {
-    http_response_code(404);
-    $page_content = include_template('error.php', [
-        'error' => $error
-    ]);
-} else {
-    http_response_code(200);
-    $page_content = include_template('index.php', [
-        'show_complete_tasks' => $show_complete_tasks,
-        'tasks' => $tasks
-    ]);
-}
 
 $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
