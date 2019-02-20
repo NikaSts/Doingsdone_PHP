@@ -4,9 +4,7 @@ $show_complete_tasks = rand(0, 1);
 
 require_once 'init.php';
 
-print_r($_GET);
-
-$error = [];
+$error = '';
 
 if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
