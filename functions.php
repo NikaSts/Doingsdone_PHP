@@ -74,4 +74,9 @@ function db_insert_data($connect, $sql, $data = [])
     return $result;
 }
 
+//функция для фильтрации данных, получаемых от пользователя
+function esc($str)
+{
+    return htmlspecialchars($str);
+}
 

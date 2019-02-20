@@ -40,7 +40,7 @@
                             <input class="checkbox__input visually-hidden task__checkbox"
                                    type="checkbox"
                                    value="1">
-                            <span class="checkbox__text"><?= htmlspecialchars($val['name']); ?></span>
+                            <span class="checkbox__text"><?= esc($val['name']); ?></span>
                         </label>
                     </td>
 
