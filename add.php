@@ -16,7 +16,6 @@ if (!$connect) {
 
     $sql_tasks = "SELECT * FROM tasks WHERE user_id = ?";
     $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
-
 }
 
 if ($error) {
@@ -25,12 +24,12 @@ if ($error) {
     ]);
 } else {
     $page_content = include_template('add_task.php', [
-         'projects' => $projects
+        'projects' => $projects
     ]);
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $form_data = $_POST; // копируем данные из формы в переменную
+    $form_task = $_POST; // копируем данные из формы в переменную
 
     $required = ['name'];   // список полей, которые надо валидировать
     $dict = ['name' => 'Название задачи'];  // описательное название для вывода ошибок
@@ -42,24 +41,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (isset($_FILES['preview']['name'])) {
+    if (isset($_FILES['preview']['name']) && is_uploaded_file($_FILES['preview']['tmp_name'])) {
         $tmp_name = $_FILES['preview']['tmp_name'];
         $path = $_FILES['preview']['name'];
-
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);  // информацию о типе файле
-        $file_type = finfo_file($finfo, $tmp_name);
+        move_uploaded_file($tmp_name, 'uploads/' . $path);
+        $form_task['path'] = $path;
+    } else {
+        $page_content = include_template('add-task.php', ['projects' => $projects, 'errors' => $errors, 'dict' => $dict]);
     }
+
+    if (count($errors)) {  // смотрим длину массива с ошибками
+        $page_content = include_template('add.php', ['projects' => $projects, 'errors' => $errors, 'dict' => $dict]);
+    } else {
+        $page_content = include_template('index.php', [
+            'show_complete_tasks' => $show_complete_tasks,
+            'tasks' => $tasks
+        ]);
+    }
+} else {
+    $page_content = include_template('add-task.php', ['projects' => $projects]);
 }
-
-
-
-
-
-
-
-
-
-
 
 $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
