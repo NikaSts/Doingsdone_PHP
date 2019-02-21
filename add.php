@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (isset($_FILES['preview']['name'])) {
+    if (isset($_FILES) && (!empty($_FILES['preview']['name']))) {
         $tmp_name = $_FILES['preview']['tmp_name'];
         $path = $_FILES['preview']['name'];
         move_uploaded_file($tmp_name, '/' . $path);

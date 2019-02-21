@@ -8,7 +8,7 @@
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
             <input class="form__input" <?= $classname; ?> type="text" name="name" id="name" value="<?= $value; ?>"
-                   placeholder="Введите название">
+                   placeholder="Введите название" required>
         </div>
 
         <div class="form__row">
@@ -16,7 +16,7 @@
 
             <select class="form__input form__input--select" name="project" id="project">
                 <? foreach ($projects as $key => $val): ?>
-                <option value=""><?= $val['name']; ?>
+                <option value=""><?= esc($val['name']); ?>
                     <? endforeach; ?>
                 </option>
 
