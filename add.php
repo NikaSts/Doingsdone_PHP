@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_FILES['preview']['name']) && is_uploaded_file($_FILES['preview']['tmp_name'])) {
         $tmp_name = $_FILES['preview']['tmp_name'];
         $path = $_FILES['preview']['name'];
-        move_uploaded_file($tmp_name, 'uploads/' . $path);
+        move_uploaded_file($tmp_name, '/' . $path);
         $form_task['path'] = $path;
     } else {
         $page_content = include_template('add-task.php', ['projects' => $projects, 'errors' => $errors, 'dict' => $dict]);
