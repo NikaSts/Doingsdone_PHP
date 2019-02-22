@@ -29,52 +29,65 @@ if ($error) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $form_task = $_POST; // копируем данные из формы в переменную
-
-    $required = ['name'];   // список полей, которые надо валидировать
-    $dict = ['name' => 'Название задачи'];  // описательное название для вывода ошибок
+    $form_task = $_POST;
     $errors = [];
 
+    // проверяем заполнено ли поле "Название"
+
+    $required = ['name'];
+    $dict = ['name' => 'Название'];
+
     foreach ($required as $key) {
-        if (empty($_POST[$key])) {
+        if (empty($required[$key])) {
             $errors[$key] = 'Это поле надо заполнить';
         }
     }
 
-    if (isset($_FILES) && (!empty($_FILES['preview']['name']))) {
+    // проверяем, правильная ли введена дата
+
+    if (isset($form_task['date'])) {
+        $delta = strtotime($form_task['date']) - strtotime(now);
+        if ($delta<0) {
+            $delta = false;
+            $errors['date'] = 'Введена дата в прошлом';
+        }
+    }
+
+    // проверяем, прикреплен ли файл
+
+    if (!empty($_FILES['preview']['name'])) {
         $tmp_name = $_FILES['preview']['tmp_name'];
         $path = $_FILES['preview']['name'];
         move_uploaded_file($tmp_name, '/' . $path);
         $form_task['path'] = $path;
+    }
 
-        $name = $_POST['name'];
-        $project_id = $_POST['project'];
-        $file_link = $_POST['preview'];
-        $time_limit = $_POST['date'];
 
-        $sql = 'INSERT INTO tasks ( name, project_id, file_link, time_limit) VALUES (?, ?, ?, ?)';
-        $stmt = mysqli_prepare($connect, $sql);
-        mysqli_stmt_bind_param($stmt, 'siss', $name, $project_id, $time_limit, $file_link);
-        $result = mysqli_stmt_execute($stmt);
-
-        $result = mysqli_query($connect, $sql);
-        if ($result) {
-            $page_content = include_template('index.php', [
-                'show_complete_tasks' => $show_complete_tasks,
-                'tasks' => $tasks
-            ]);
-        } else {
-            $page_content = include_template('error.php', [
-                'error' => $error
-            ]);
+    foreach ($projects as $key) {
+        if ($form_task['project'] === $projects['name']) {
+            $project_id = $projects['id'];
         }
+    }
 
+    $sql = 'INSERT INTO tasks ( name, project_id, file_link, time_limit) VALUES (?, ?, ?, ?)';
+    $stmt = mysqli_prepare($connect, $sql);
+    mysqli_stmt_bind_param($stmt, 'siss', $form_task['name'], $project_id, $form_task['preview'], $form_task['date']);
+    $result = mysqli_stmt_execute($stmt);
+
+
+    if ($result) {
+        $page_content = include_template('index.php', [
+            'show_complete_tasks' => $show_complete_tasks,
+            'tasks' => $tasks
+        ]);
     } else {
-        $page_content = include_template('add_task.php', ['projects' => $projects, 'errors' => $errors, 'dict' => $dict]);
+        $page_content = include_template('error.php', [
+            'error' => $error
+        ]);
     }
 
     if (count($errors)) {  // смотрим длину массива с ошибками
-        $page_content = include_template('add.php', ['projects' => $projects, 'errors' => $errors, 'dict' => $dict]);
+        $page_content = include_template('add_task.php', ['projects' => $projects, 'errors' => $errors, 'dict' => $dict]);
     } else {
         $page_content = include_template('index.php', [
             'show_complete_tasks' => $show_complete_tasks,
@@ -89,5 +102,8 @@ $layout_content = include_template('layout.php', [
     'tasks' => $tasks,
     'title' => 'Дела в порядке',
 ]);
+
+print_r($_POST);
+print_r($errors);
 
 print($layout_content);

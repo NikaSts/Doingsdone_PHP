@@ -2,32 +2,35 @@
     <h2 class="content__main-heading">Добавление задачи</h2>
 
     <form class="form" action="/add.php?" method="post" enctype="multipart/form-data">
-        <div class="form__row">
-            <?php $classname = isset($errors['name']) ? "form__input--error" : "";
-            $value = isset($form_task['name']) ? $form_task['name'] : ""; ?>
+        <div class="form__row <?= empty($_FILES['name']) ? " form__input--error" : '' ?>">
             <label class="form__label" for="name">Название <sup>*</sup></label>
-
-            <input class="form__input" <?= $classname; ?> type="text" name="name" id="name" value="<?= $value; ?>"
+            <input class="form__input" type="text" name="name" id="name" value=""
                    placeholder="Введите название" required>
+            <? if (isset($errors['name'])): ?>
+                <p class="form__error"><?= $errors['name']; ?></p>
+            <? endif; ?>
         </div>
 
         <div class="form__row">
             <label class="form__label" for="project">Проект</label>
-
             <select class="form__input form__input--select" name="project" id="project">
                 <? foreach ($projects as $key => $val): ?>
-                <option value="<?= esc($val['name']); ?>"><?= esc($val['name']); ?>
+                <option value="<?= ($val['id']); ?>"><?= ($val['name']); ?>
                     <? endforeach; ?>
                 </option>
 
             </select>
         </div>
 
-        <div class="form__row">
+        <div class="form__row <?= $date === 0 ? " form__input--error" : '' ?>">
             <label class="form__label" for="date">Дата выполнения</label>
 
-            <input class="form__input form__input--date" type="text" name="date" id="date" value=""
+            <input class="form__input form__input--date" type="date" name="date" id="date" value=""
                    placeholder="Введите дату в формате ДД.ММ.ГГГГ">
+            <? if (isset($errors['date'])): ?>
+                <p class="form__error"><?= $errors['date']; ?></p>
+            <? endif; ?>
+
         </div>
 
         <div class="form__row">
@@ -41,18 +44,6 @@
                 </label>
             </div>
         </div>
-
-        <?php if (isset($errors)): ?>
-            <div class="form__errors">
-                <p>Пожалуйста, исправьте следующие ошибки:</p>
-                <ul>
-                    <?php foreach ($errors as $err => $val): ?>
-                        <li><strong><?= $dict[$err]; ?>:</strong><?= $val; ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
-
 
         <div class="form__row form__row--controls">
             <input class="button" type="submit" name="" value="Добавить">
