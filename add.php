@@ -8,13 +8,13 @@ if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
 } else {
     $user_id = 1;
-    $sql_projects = "SELECT * FROM projects WHERE user_id = ?";
+    $sql_projects = 'SELECT * FROM projects WHERE user_id = ?';
     $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
 
     $tasks = [];
     $project_id = intval($_GET['project_id']);
 
-    $sql_tasks = "SELECT * FROM tasks WHERE user_id = ?";
+    $sql_tasks = 'SELECT * FROM tasks WHERE user_id = ?';
     $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
 }
 
@@ -46,8 +46,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $path = $_FILES['preview']['name'];
         move_uploaded_file($tmp_name, '/' . $path);
         $form_task['path'] = $path;
+
+        $name = $_POST['name'];
+        $project_id = $_POST['project'];
+        $file_link = $_POST['preview'];
+        $time_limit = $_POST['date'];
+
+        $sql = 'INSERT INTO tasks ( name, project_id, file_link, time_limit) VALUES (?, ?, ?, ?)';
+        $stmt = mysqli_prepare($connect, $sql);
+        mysqli_stmt_bind_param($stmt, 'siss', $name, $project_id, $time_limit, $file_link);
+        $result = mysqli_stmt_execute($stmt);
+
+        $result = mysqli_query($connect, $sql);
+        if ($result) {
+            $page_content = include_template('index.php', [
+                'show_complete_tasks' => $show_complete_tasks,
+                'tasks' => $tasks
+            ]);
+        } else {
+            $page_content = include_template('error.php', [
+                'error' => $error
+            ]);
+        }
+
     } else {
-        $page_content = include_template('add-task.php', ['projects' => $projects, 'errors' => $errors, 'dict' => $dict]);
+        $page_content = include_template('add_task.php', ['projects' => $projects, 'errors' => $errors, 'dict' => $dict]);
     }
 
     if (count($errors)) {  // смотрим длину массива с ошибками
@@ -58,8 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'tasks' => $tasks
         ]);
     }
-} else {
-    $page_content = include_template('add-task.php', ['projects' => $projects]);
 }
 
 $layout_content = include_template('layout.php', [
