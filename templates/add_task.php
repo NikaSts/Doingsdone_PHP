@@ -16,7 +16,7 @@
 
             <select class="form__input form__input--select" name="project" id="project">
                 <? foreach ($projects as $key => $val): ?>
-                <option value=""><?= esc($val['name']); ?>
+                <option value="<?= esc($val['name']); ?>"><?= esc($val['name']); ?>
                     <? endforeach; ?>
                 </option>
 
