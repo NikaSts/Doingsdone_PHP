@@ -7,7 +7,7 @@ CREATE TABLE users
   id        INT AUTO_INCREMENT PRIMARY KEY,
   signed_up DATETIME DEFAULT current_timestamp NOT NULL,
   email     CHAR(128)                          NOT NULL UNIQUE,
-  name      CHAR(64)                           NOT NULL UNIQUE,
+  name      CHAR(64)                           NOT NULL,
   password  CHAR(64)                           NOT NULL
 );
 CREATE TABLE projects
@@ -22,9 +22,9 @@ CREATE TABLE tasks
   name       CHAR(128) NOT NULL,
   project_id INT,
   now_status ENUM ('0', '1') DEFAULT '0',
-  file_link  CHAR,
+  file_link  CHAR(255),
   time_limit DATETIME,
-  is_created DATETIME  NOT NULL,
+  is_created DATETIME DEFAULT current_timestamp NOT NULL,
   is_done    DATETIME,
   user_id    INT       NOT NULL
 );

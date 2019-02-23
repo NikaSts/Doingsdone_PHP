@@ -43,7 +43,7 @@ function time_counter($date)
         return false;
     }
     $time_left = floor((strtotime($date) - time()) / 3600);
-    if ($time_left <= 24) {
+    if (0 < $time_left && $time_left <= 24) {
         return true;
     } else {
         return false;
@@ -74,4 +74,9 @@ function db_insert_data($connect, $sql, $data = [])
     return $result;
 }
 
+//функция для фильтрации данных, получаемых от пользователя
+function esc($str)
+{
+    return htmlspecialchars($str);
+}
 
