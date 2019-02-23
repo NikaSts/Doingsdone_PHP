@@ -34,12 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // проверяем заполнено ли поле "Название"
 
-    $required = ['name'];
-
-    foreach ($required as $key) {
-        if (empty($required[$key])) {
-            $errors[$key] = 'Это поле надо заполнить';
-        }
+    if (empty($form_task['name'])) {
+        $errors['name'] = 'Это поле надо заполнить';
     }
 
     // проверяем, выбран ли проект
@@ -47,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($projects as $key) {
         if ($form_task['project'] === $projects['name']) {
             $project_id = $projects['id'];
-        } else {
+        } else if (!is_numeric($form_task['project'])) {
             $errors['project'] = 'Не выбран проект';
         }
     }
@@ -57,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($form_task['date'])) {
         $delta = strtotime($form_task['date']) - strtotime(now);
-        if ($delta<0) {
+        if ($delta < 0) {
             $delta = false;
             $errors['date'] = 'Введена дата в прошлом';
         }
@@ -72,31 +68,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $form_task['path'] = $path;
     }
 
-    if (count($errors)) {  // смотрим длину массива с ошибками
-        $page_content = include_template('add_task.php', ['projects' => $projects, 'errors' => $errors, 'dict' => $dict]);
+    if (count($errors) > 0) {  // смотрим длину массива с ошибками
+        $page_content = include_template('add_task.php', ['projects' => $projects, 'errors' => $errors]);
     } else {
-        $page_content = include_template('index.php', [
-            'show_complete_tasks' => $show_complete_tasks,
-            'tasks' => $tasks
-        ]);
-    }
-
-        $sql = 'INSERT INTO tasks ( name, project_id, file_link, time_limit) VALUES (?, ?, ?, ?)';
+        $sql = 'INSERT INTO tasks ( name, project_id, file_link, time_limit, is_created, user_id) VALUES (?, ?, ?, ?, now(), ?)';
         $stmt = mysqli_prepare($connect, $sql);
-        mysqli_stmt_bind_param($stmt, 'siss', $form_task['name'], $project_id, $form_task['preview'], $form_task['date']);
+        mysqli_stmt_bind_param($stmt, 'siss',$form_task['name'], $project_id, $form_task['preview'], $form_task['date'], $user_id);
         $result = mysqli_stmt_execute($stmt);
+        if ($result) {
+            $page_content = include_template('index.php', [
+                'show_complete_tasks' => $show_complete_tasks,
+                'tasks' => $tasks
+            ]);
+        }
     }
-
-    if ($result) {
-        $page_content = include_template('index.php', [
-            'show_complete_tasks' => $show_complete_tasks,
-            'tasks' => $tasks
-        ]);
-    } else {
-        $page_content = include_template('add_task.php', ['projects' => $projects, 'errors' => $errors, 'dict' => $dict]);
-    }
-
-
+}
+var_dump(count($errors));
 
 $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
