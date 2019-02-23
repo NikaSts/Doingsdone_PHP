@@ -34,56 +34,64 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // проверяем заполнено ли поле "Название"
 
+    $name = '';
     if (empty($form_task['name'])) {
         $errors['name'] = 'Это поле надо заполнить';
+    } else {
+        $name = $form_task['name'];
     }
 
     // проверяем, выбран ли проект
 
-    foreach ($projects as $key) {
-        if ($form_task['project'] === $projects['name']) {
-            $project_id = $projects['id'];
-        } else if (!is_numeric($form_task['project'])) {
-            $errors['project'] = 'Не выбран проект';
+    $project_id = false;
+    foreach ($projects as $project) {
+        if ($form_task['project'] == $project['id']) {
+            $project_id = intval($form_task['project']);
         }
     }
-
+    if (!$project_id) {
+        $errors['project'] = 'Надо выбрать проект';
+    }
 
     // проверяем, правильная ли введена дата
 
-    if (isset($form_task['date'])) {
-        $delta = strtotime($form_task['date']) - strtotime(now);
+    if (!empty($form_task['date'])) {
+        $delta = strtotime($form_task['date']) - strtotime(date('d.m.Y 00:00:00'));
         if ($delta < 0) {
-            $delta = false;
-            $errors['date'] = 'Введена дата в прошлом';
+            $errors['date'] = 'Надо ввести дату в будущем';
         }
     }
 
     // проверяем, прикреплен ли файл
 
+    $path = '';
     if (!empty($_FILES['preview']['name'])) {
         $tmp_name = $_FILES['preview']['tmp_name'];
         $path = $_FILES['preview']['name'];
+
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $path = '' . uniqid() . "." . $ext;
         move_uploaded_file($tmp_name, '' . $path);
-        $form_task['path'] = $path;
     }
 
-    if (count($errors) > 0) {  // смотрим длину массива с ошибками
+    // смотрим длину массива с ошибками
+    if (count($errors) > 0) {
         $page_content = include_template('add_task.php', ['projects' => $projects, 'errors' => $errors]);
     } else {
-        $sql = 'INSERT INTO tasks ( name, project_id, file_link, time_limit, is_created, user_id) VALUES (?, ?, ?, ?, now(), ?)';
-        $stmt = mysqli_prepare($connect, $sql);
-        mysqli_stmt_bind_param($stmt, 'siss',$form_task['name'], $project_id, $form_task['preview'], $form_task['date'], $user_id);
-        $result = mysqli_stmt_execute($stmt);
+        $sql = 'INSERT INTO tasks ( name, project_id, file_link, time_limit, is_created, user_id) VALUES (?, ?, ?, ?,now(), ?)';
+        $result = db_insert_data($connect, $sql, [
+            $form_task['name'],
+            $project_id,
+            $path,
+            date('Y.m.d 23:59:59', strtotime($form_task['date'])),
+            $user_id
+        ]);
+
         if ($result) {
-            $page_content = include_template('index.php', [
-                'show_complete_tasks' => $show_complete_tasks,
-                'tasks' => $tasks
-            ]);
+            header('Location: /');
         }
     }
 }
-var_dump(count($errors));
 
 $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
@@ -91,8 +99,5 @@ $layout_content = include_template('layout.php', [
     'tasks' => $tasks,
     'title' => 'Дела в порядке',
 ]);
-
-print_r($_POST);
-print_r($errors);
 
 print($layout_content);
