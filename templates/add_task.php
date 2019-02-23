@@ -13,12 +13,15 @@
 
         <div class="form__row">
             <label class="form__label" for="project">Проект</label>
-            <select class="form__input form__input--select" name="project" id="project">
+            <select class="form__input form__input--select" name="project" id="project" required>
+                <option selected>Выберите проект</option>
                 <? foreach ($projects as $key => $val): ?>
                 <option value="<?= ($val['id']); ?>"><?= ($val['name']); ?>
                     <? endforeach; ?>
                 </option>
-
+                <? if (isset($errors['project'])):?>
+                    <p class="form__error"><?=$errors['project'];?></p>
+                <? endif; ?>
             </select>
         </div>
 
