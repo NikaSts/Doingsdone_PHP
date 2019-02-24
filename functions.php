@@ -45,8 +45,6 @@ function time_counter($date)
     $time_left = floor((strtotime($date) - time()) / 3600);
     if (0 < $time_left && $time_left <= 24) {
         return true;
-    } else {
-        return false;
     }
 }
 
@@ -84,8 +82,6 @@ function esc($str)
 function check_required ($data) {
     if (empty($data)) {
         return true;
-    } else {
-        return false;
     }
 }
 
