@@ -16,7 +16,7 @@ if (!$connect) {
     $tasks = [];
     $project_id = intval($_GET['project_id']);
 
-    $sql_tasks = "SELECT * FROM tasks WHERE user_id = ?";
+    $sql_tasks = "SELECT * FROM tasks WHERE user_id = ? ORDER BY id DESC";
     $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
 
     if (isset($_GET['project_id']) && !$project_id) {
