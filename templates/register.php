@@ -13,7 +13,7 @@
         <div class="form__row">
             <label class="form__label" for="password">Пароль <sup>*</sup></label>
             <input class="form__input <?= isset($errors['email']) ? " form__input--error" : '' ?>" type="password" name="password" id="password" value="" placeholder="Введите пароль">
-            <? if (isset($errors['password'])): ?>
+            <? if (isset($errors)): ?>
                 <p class="form__message">Это поле надо заполнить</p>
             <? endif; ?>
         </div>
