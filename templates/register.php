@@ -6,7 +6,7 @@
             <label class="form__label" for="email">E-mail <sup>*</sup></label>
             <input class="form__input <?= isset($errors['email']) ? " form__input--error" : '' ?>" type="text" name="email" id="email" value="<?= isset($_POST['email']) ? esc($_POST['email']) : ''; ?>" placeholder="Введите e-mail">
             <? if (isset($errors['email'])): ?>
-            <p class="form__message">E-mail введён некорректно</p>
+            <p class="form__message"><?= $errors['email']; ?></p>
             <? endif; ?>
         </div>
 
@@ -27,9 +27,6 @@
         </div>
 
         <div class="form__row form__row--controls">
-            <? if (isset($errors)): ?>
-            <p class="error-message">Пожалуйста, исправьте ошибки в форме</p>
-            <? endif; ?>
             <input class="button" type="submit" name="" value="Зарегистрироваться">
         </div>
     </form>

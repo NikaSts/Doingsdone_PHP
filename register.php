@@ -13,8 +13,6 @@ if (!$connect) {
     $page_content = include_template('register.php', []);
 }
 
-
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form_register = $_POST;
     $errors = [];
@@ -23,12 +21,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (check_required($form_register['email'])) {
         $errors['email'] = 'Это поле надо заполнить';
+    } else if (!filter_var($form_register['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'E-mail введён некорректно';
+    } else {
+        $email = $form_register['email'];
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $matchFound = db_fetch_data($connect, $sql, [$email]);
+        if ($matchFound) {
+            $errors['email'] = 'Пользователь с таким e-mail уже существует';
+        }
     }
 
     //Проверяем поле password на ошибки
 
+    $passwordHash = '';
+
     if (check_required($form_register['password'])) {
         $errors['password'] = 'Это поле надо заполнить';
+    } else {
+        $password = $form_register['password'];
+        $passwordHash = password_hash('$password', PASSWORD_DEFAULT);
     }
 
     //Проверяем поле name на ошибки
@@ -44,21 +56,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = 'INSERT INTO users ( signed_up, email, name, password) VALUES (now(), ?, ?, ?)';
         $result = db_insert_data($connect, $sql, [
             $form_register['email'],
-            $form_register['password'],
-            $form_register['name']
+            $form_register['name'],
+            $passwordHash
         ]);
     }
 
     if ($result) {
-        header('Location: /user_id=' . $result);
+        header('Location: /');
     }
 }
 
-    $layout_content = include_template('layout_non_auth.php', [
+$layout_content = include_template('layout_non_auth.php', [
     'page_content' => $page_content,
     'title' => 'Форма регистрации',
 ]);
-
-print_r($errors);
 
 print($layout_content);

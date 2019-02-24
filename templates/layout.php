@@ -31,8 +31,7 @@
                     <div class="user-menu__data">
                         <p>Константин</p>
 
-                        <a href="#">Выйти</a>
-                        <a href="/register.php">Вoйти</a>
+                        <a href="/register.php">Выйти</a>
 
                     </div>
                 </div>
