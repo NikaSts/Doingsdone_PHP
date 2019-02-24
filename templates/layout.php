@@ -32,6 +32,8 @@
                         <p>Константин</p>
 
                         <a href="#">Выйти</a>
+                        <a href="/register.php">Вoйти</a>
+
                     </div>
                 </div>
             </div>
