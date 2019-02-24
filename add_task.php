@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // проверяем заполнено ли поле "Название"
 
     $name = '';
-    if (empty($form_task['name'])) {
+    if (check_required($form_register['name'])) {
         $errors['name'] = 'Это поле надо заполнить';
     } else {
         $name = $form_task['name'];
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (count($errors) > 0) {
         $page_content = include_template('add_task.php', ['projects' => $projects, 'errors' => $errors]);
     } else {
-        $sql = 'INSERT INTO tasks ( name, project_id, file_link, time_limit, is_created, user_id) VALUES (?, ?, ?, ?,now(), ?)';
+        $sql = 'INSERT INTO tasks ( name, project_id, file_link, time_limit, is_created, user_id) VALUES (?, ?, ?, ?, now(), ?)';
         $result = db_insert_data($connect, $sql, [
             $form_task['name'],
             $project_id,

@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // проверяем заполнено ли поле "Название"
     $name = '';
-    if (empty($form_project['name'])) {
+    if (check_required($form_project['name'])) {
         $errors['name'] = 'Это поле надо заполнить';
     } else {
         $name = $form_project['name'];
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $sql = 'INSERT INTO projects ( name, user_id) VALUES (?, ?)';
         $result = db_insert_data($connect, $sql, [
-            $form_project['name'],
+            $name,
             $user_id
         ]);
 

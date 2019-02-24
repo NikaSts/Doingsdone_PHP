@@ -80,3 +80,14 @@ function esc($str)
     return htmlspecialchars($str);
 }
 
+//Функция проверки обязательного к заполнению поля формы
+function check_required ($data) {
+    if (empty($data)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
