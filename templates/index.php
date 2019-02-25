@@ -48,7 +48,7 @@
                         <a class="download-link" href="#">Home.psd</a>
                     </td>
 
-                    <td class="task__date"><?= strtotime($val['time_limit']) > strtotime(now) ? date('d.m.Y', strtotime($val['time_limit'])) : ''; ?></td>
+                    <td class="task__date"><?= date('Y', strtotime($val['time_limit'])) > 1970 ? date('d.m.Y', strtotime($val['time_limit'])) : ''; ?></td>
                 </tr>
 
 
