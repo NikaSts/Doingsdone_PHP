@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     //Проверяем поле email на ошибки
 
-    if (check_required($form_register['email'])) {
+    if (empty($form_register['email'])) {
         $errors['email'] = 'Это поле надо заполнить';
     } else if (!filter_var($form_register['email'], FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'E-mail введён некорректно';
@@ -36,16 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $passwordHash = '';
 
-    if (check_required($form_register['password'])) {
+    if (empty($form_register['password'])) {
         $errors['password'] = 'Это поле надо заполнить';
     } else {
         $password = $form_register['password'];
-        $passwordHash = password_hash('$password', PASSWORD_DEFAULT);
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
     }
 
     //Проверяем поле name на ошибки
 
-    if (check_required($form_register['name'])) {
+    if (empty($form_register['name'])) {
         $errors['name'] = 'Это поле надо заполнить';
     }
 

@@ -76,6 +76,9 @@
         <h2 class="content__main-heading">Добавление задачи</h2>
 
         <form class="form"  action="index.html" method="post">
+          <? if (isset($errors)): ?>
+          <p class="error-message">Пожалуйста, исправьте ошибки в форме</p>
+          <? endif; ?>
           <div class="form__row">
             <label class="form__label" for="name">Название <sup>*</sup></label>
 

@@ -2,6 +2,9 @@
     <h2 class="content__main-heading">Регистрация аккаунта</h2>
 
     <form class="form" action="/register.php" method="post">
+        <? if (isset($errors)): ?>
+            <p class="error-message">Пожалуйста, исправьте ошибки в форме</p>
+        <? endif; ?>
         <div class="form__row">
             <label class="form__label" for="email">E-mail <sup>*</sup></label>
             <input class="form__input <?= isset($errors['email']) ? " form__input--error" : '' ?>" type="text" name="email" id="email" value="<?= isset($_POST['email']) ? esc($_POST['email']) : ''; ?>" placeholder="Введите e-mail">

@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // проверяем заполнено ли поле "Название"
 
     $name = '';
-    if (check_required($form_task['name'])) {
+    if (empty($form_task['name'])) {
         $errors['name'] = 'Это поле надо заполнить';
     } else {
         $name = $form_task['name'];
