@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($form_register['password'])) {
         $errors['password'] = 'Это поле надо заполнить';
     } else {
-        $password = $form_register['password'];
+        $password = trim($form_register['password']);
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
     }
 
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if ($result) {
-        header('Location: /');
+        header('Location: /auth.php');
     }
 }
 
