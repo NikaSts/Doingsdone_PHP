@@ -21,10 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $matchFound = [];
 
 
-    if (empty($form_register['password'])) {
-        $errors['password'] = 'Это поле надо заполнить';
-    }
-
     if (empty($form_auth['email'])) {
         $errors['email'] = 'Это поле надо заполнить';
     } else if (!filter_var($form_auth['email'], FILTER_VALIDATE_EMAIL)) {
@@ -35,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "SELECT * FROM users WHERE email = ?";
         $matchFound = db_fetch_data($connect, $sql, [$email]);
         foreach ($matchFound as $keys) {
-            $password = $matchFound['password'];
+            $password = $matchFound[0]['password'];
         }
         if (!$matchFound) {
             $errors['email'] = 'Пользователя с таким e-mail нет на сайте';
@@ -46,6 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
            $_SESSION['user'] = $matchFound;
         }
     }
+    if (empty($form_register['password'])) {
+        $errors['password'] = 'Это поле надо заполнить';
+    }
 
     if (count($errors) > 0) {
         $page_content = include_template('auth.php', ['errors' => $errors]);
@@ -54,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-print_r($matchFound);
+print_r($matchFound[0]['password']);
 
 $layout_content = include_template('layout_non_auth.php', [
     'page_content' => $page_content,
