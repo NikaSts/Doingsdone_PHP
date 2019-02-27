@@ -45,7 +45,7 @@
                     </td>
 
                     <td class="task__file">
-                        <a class="download-link" href="#">Home.psd</a>
+                        <a class="download-link" href="<?= $val['file_link'];?>"><?= $val['file_link']; ?></a>
                     </td>
 
                     <td class="task__date"><?= date('Y', strtotime($val['time_limit'])) > 1970 ? date('d.m.Y', strtotime($val['time_limit'])) : ''; ?></td>

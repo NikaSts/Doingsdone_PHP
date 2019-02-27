@@ -2,6 +2,14 @@
 
 require_once 'init.php';
 
+$is_auth = 0;
+$user_name = '';
+
+if (!empty($_SESSION['id'])) {
+    $is_auth = 1;
+    $user_name = $_SESSION['name'];
+}
+
 $error = '';
 
 if (!$connect) {
@@ -70,5 +78,6 @@ $layout_content = include_template('layout_non_auth.php', [
     'page_content' => $page_content,
     'title' => 'Форма регистрации',
 ]);
+print_r($is_auth);
 
 print($layout_content);

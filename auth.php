@@ -56,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 print_r($is_auth);
-print_r($_SESSION);
 /*
 if (!filter_var($form_auth['email'], FILTER_VALIDATE_EMAIL)) {
     $errors['email'] = 'E-mail введён некорректно';

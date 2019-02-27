@@ -2,7 +2,12 @@
 
 require_once 'mysql_helper.php';
 
-// создание функции-шаблонизатора
+/**
+ * Шаблонизатор
+ * @param $name
+ * @param $data
+ * @return false|string
+ */
 function include_template($name, $data)
 {
     $name = 'templates/' . $name;
@@ -11,17 +16,20 @@ function include_template($name, $data)
     if (!is_readable($name)) {
         return $page_content;
     }
-
     ob_start();
     extract($data);
     require $name;
-
     $page_content = ob_get_clean();
 
     return $page_content;
 }
 
-// создание функции для подсчета задач у каждого из проектов
+/**
+ * Считет количество задач у каждого из проектов
+ * @param $tasks
+ * @param $project
+ * @return int
+ */
 function calculate_amount($tasks, $project)
 {
     $amount = 0;
@@ -36,7 +44,11 @@ function calculate_amount($tasks, $project)
     return $amount;
 }
 
-//функция расчета времени до запланированного задания
+/**
+ * функция расчета времени до запланированного задания
+ * @param $date
+ * @return bool
+ */
 function time_counter($date)
 {
     if ($date === NULL) {
@@ -50,7 +62,13 @@ function time_counter($date)
     }
 }
 
-//функция для чтения записей из БД
+/**
+ * Читает записи из БД
+ * @param $connect
+ * @param $sql
+ * @param array $data
+ * @return array|null
+ */
 function db_fetch_data($connect, $sql, $data = [])
 {
     $result = [];
@@ -63,7 +81,14 @@ function db_fetch_data($connect, $sql, $data = [])
     return $result;
 }
 
-//Функция для добавления записей в БД
+//Функция для
+/**
+ * Добавляет записи в БД
+ * @param $connect
+ * @param $sql
+ * @param array $data
+ * @return bool|int|string
+ */
 function db_insert_data($connect, $sql, $data = [])
 {
     $stmt = db_get_prepare_stmt($connect, $sql, $data);
@@ -74,12 +99,31 @@ function db_insert_data($connect, $sql, $data = [])
     return $result;
 }
 
-//функция для фильтрации данных, получаемых от пользователя
+/**
+ * Фильтрирует данные, получаемые от пользователей
+ * @param $str
+ * @return string
+ */
 function esc($str)
 {
     return htmlspecialchars($str);
 }
 
-
+/**
+ * Проверяет, что переданная дата соответствует формату ДД.ММ.ГГГГ
+ * @param string $date строка с датой
+ * @return bool
+ */
+function check_date_format($date) {
+    $result = false;
+    $regexp = '/(\d{2})\.(\d{2})\.(\d{4})/m';
+    if (preg_match($regexp, $date, $parts) && count($parts) == 4) {
+        $result = checkdate($parts[2], $parts[1], $parts[3]);
+    }
+    return $result;
+}
+check_date_format("04.02.2019"); // true
+check_date_format("15.23.1989"); // false
+check_date_format("1989-15-02"); // false
 
 

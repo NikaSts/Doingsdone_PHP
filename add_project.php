@@ -44,6 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['name'] = 'Это поле надо заполнить';
     } else {
         $name = $form_project['name'];
+
+        $sql = "SELECT * FROM projects WHERE name = ?";
+        $matchFound = db_fetch_data($connect, $sql, [$name]);
+        if ($matchFound) {
+            $errors['name'] = 'Такой проект уже существует';
+        }
     }
 
     // смотрим длину массива с ошибками

@@ -67,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!empty($form_task['date'])) {
         $delta = strtotime($form_task['date']) - strtotime(date('d.m.Y 00:00:00'));
-        if ($delta < 0) {
-            $errors['date'] = 'Надо ввести дату в будущем';
+        if ($delta < 0 || !check_date_format($form_task['date'])) {
+            $errors['date'] = 'Надо ввести дату в правильном формате';
         }
     }
 
