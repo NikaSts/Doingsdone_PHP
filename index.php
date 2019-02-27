@@ -4,12 +4,22 @@ $show_complete_tasks = rand(0, 1);
 
 require_once 'init.php';
 
+$is_auth = 0;
+$user_name = '';
+
+if (!empty($_SESSION['id'])) {
+    $is_auth = 1;
+    $user_name = $_SESSION['name'];
+}
+
+$projects = [];
+$tasks = [];
 $error = '';
 
 if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
 } else {
-    $user_id = 1;
+    $user_id = $_SESSION['id'];
     $sql_projects = "SELECT * FROM projects WHERE user_id = ?";
     $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
 
@@ -48,12 +58,9 @@ $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
     'projects' => $projects,
     'tasks' => $tasks,
-    'title' => 'Дела в порядке'
+    'title' => 'Дела в порядке',
+    'user_name' => $user_name
 ]);
 
 print($layout_content);
-
-
-
-
 
