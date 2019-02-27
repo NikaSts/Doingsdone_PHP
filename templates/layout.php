@@ -13,60 +13,60 @@
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
+
     <div class="container container--with-sidebar">
+        <header class="main-header>">
+            <? if ($is_auth = 1): ?>
+                <a href="/">
+                    <img src="/img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
+                </a>
 
-        <header class="main-header <?= $is_auth = 0 ? ' visually-hidden' : '' ?>">
-            <a href="/">
-                <img src="/img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
-            </a>
+                <div class="main-header__side">
+                    <a class="main-header__side-item button button--plus open-modal" href="/add_task.php">Добавить
+                        задачу</a>
 
-            <div class="main-header__side">
-                <a class="main-header__side-item button button--plus open-modal" href="/add_task.php">Добавить
-                    задачу</a>
+                    <div class="main-header__side-item user-menu">
+                        <div class="user-menu__image">
+                            <img src="/img/user.png" width="40" height="40" alt="Пользователь">
+                        </div>
 
-                <div class="main-header__side-item user-menu">
-                    <div class="user-menu__image">
-                        <img src="/img/user.png" width="40" height="40" alt="Пользователь">
-                    </div>
-
-                    <div class="user-menu__data">
-                        <p><?= $user_name; ?></p>
-
-                        <a href="/logout.php">Выйти</a>
-
+                        <div class="user-menu__data">
+                            <p><?= $user_name; ?></p>
+                            <a href="/logout.php">Выйти</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <? else: ?>
+                <a href="/">
+                    <img src="../img/logo.png" width="153" height="42" alt="Логитип Дела в порядке">
+                </a>
+                <div class="main-header__side">
+                    <a class="main-header__side-item button button--transparent" href="/auth.php">Войти</a>
+                </div>
+            <? endif; ?>
         </header>
-
-        <header class="main-header <?= $is_auth = 1 ? ' visually-hidden' : '' ?>">
-            <a href="/">
-                <img src="../img/logo.png" width="153" height="42" alt="Логитип Дела в порядке">
-            </a>
-
-            <div class="main-header__side">
-                <a class="main-header__side-item button button--transparent" href="/auth.php">Войти</a>
-            </div>
-        </header>
-
 
         <div class="content">
-            <section class="content__side  <?= $is_auth = 0 ? ' visually-hidden' : '' ?>">
-                <h2 class="content__side-heading">Проекты</h2>
-
-                <nav class="main-navigation">
-                    <ul class="main-navigation__list">
-                        <? foreach ($projects as $key => $val): ?>
-                            <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link" href="/index.php?project_id=<?= $val['id'] ?>"><?= $val['name']; ?></a>
-                                <span class="main-navigation__list-item-count"><?= calculate_amount($tasks, $val['id']); ?></span>
-                            </li>
-                        <? endforeach; ?>
-                    </ul>
-                </nav>
-
-                <a class="button button--transparent button--plus content__side-button"
-                   href="/add_project.php" target="project_add">Добавить проект</a>
+            <section class="content__side">
+                <? if ($is_auth = 1): ?>
+                    <h2 class="content__side-heading">Проекты</h2>
+                    <nav class="main-navigation">
+                        <ul class="main-navigation__list">
+                            <? foreach ($projects as $key => $val): ?>
+                                <li class="main-navigation__list-item">
+                                    <a class="main-navigation__list-item-link"
+                                       href="/index.php?project_id=<?= $val['id'] ?>"><?= $val['name']; ?></a>
+                                    <span class="main-navigation__list-item-count"><?= calculate_amount($tasks, $val['id']); ?></span>
+                                </li>
+                            <? endforeach; ?>
+                        </ul>
+                    </nav>
+                    <a class="button button--transparent button--plus content__side-button"
+                       href="/add_project.php" target="project_add">Добавить проект</a>
+                <? else: ?>
+                    <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
+                    <a class="button button--transparent content__side-button"
+                       href="/auth.php">Войти</a>                <? endif; ?>
             </section>
 
             <main class="content__main">

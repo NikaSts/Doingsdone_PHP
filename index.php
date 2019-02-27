@@ -61,6 +61,6 @@ $layout_content = include_template('layout.php', [
     'title' => 'Дела в порядке',
     'user_name' => $user_name
 ]);
-
+print_r($is_auth);
 print($layout_content);
 
