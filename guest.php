@@ -11,7 +11,6 @@ $layout_content = include_template('layout.php', [
 'title' => 'Сервис «Дела в порядке»',
 ]);
 
-print_r($is_auth);
 print($layout_content);
 
 

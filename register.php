@@ -74,10 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$layout_content = include_template('layout_non_auth.php', [
+$layout_content = include_template('layout.php', [
     'page_content' => $page_content,
     'title' => 'Форма регистрации',
+    'is_auth' => $is_auth
 ]);
-print_r($is_auth);
 
 print($layout_content);

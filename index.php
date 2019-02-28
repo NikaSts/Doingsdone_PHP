@@ -18,7 +18,7 @@ $error = '';
 
 if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
-} else {
+} else if (isset($_SESSION['id'])) {
     $user_id = $_SESSION['id'];
     $sql_projects = "SELECT * FROM projects WHERE user_id = ?";
     $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
@@ -28,7 +28,6 @@ if (!$connect) {
 
     $sql_tasks = "SELECT * FROM tasks WHERE user_id = ? ORDER BY id DESC";
     $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
-
     if (isset($_GET['project_id']) && !$project_id) {
         $error = '404';
         http_response_code(404);
@@ -47,7 +46,7 @@ if ($error) {
         'error' => $error
     ]);
 } else {
-    $page_content = include_template('index.php', [
+    $page_content = include_template($is_auth ? 'index.php' : 'guest.php', [
         'show_complete_tasks' => $show_complete_tasks,
         'tasks' => $tasks
     ]);
@@ -59,8 +58,10 @@ $layout_content = include_template('layout.php', [
     'projects' => $projects,
     'tasks' => $tasks,
     'title' => 'Дела в порядке',
-    'user_name' => $user_name
+    'user_name' => $user_name,
+    'sidebar' => !!$is_auth,
+    'is_auth' => $is_auth
 ]);
-print_r($is_auth);
-print($layout_content);
 
+
+print($layout_content);

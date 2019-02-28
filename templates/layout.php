@@ -9,19 +9,19 @@
     <link rel="stylesheet" href="/css/flatpickr.min.css">
 </head>
 
-<body>
+<body<?= $sidebar !== false ? '' : ' class="body-background"'?>>
+
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
 
-    <div class="container container--with-sidebar">
+    <div class="container<?= $sidebar !== false ? ' container--with-sidebar' : ''?>">
         <header class="main-header">
             <a href="/">
                 <img src="/img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
             <div class="main-header__side">
-                <? if ($is_auth === 0): ?>
-
+                <? if ($is_auth === 1): ?>
                     <a class="main-header__side-item button button--plus open-modal" href="/add_task.php">Добавить
                         задачу</a>
 
@@ -43,6 +43,7 @@
         </header>
 
         <div class="content">
+            <?if ($sidebar !== false):?>
             <section class="content__side">
                 <? if ($is_auth === 1): ?>
                     <h2 class="content__side-heading">Проекты</h2>
@@ -65,6 +66,7 @@
                        href="/auth.php">Войти</a>
                 <? endif; ?>
             </section>
+            <?endif?>
 
             <main class="content__main">
                 <?= $page_content; ?>
@@ -80,7 +82,9 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
+        <?if ($is_auth === 1):?>
         <a class="main-footer__button button button--plus" href="/add_task.php">Добавить задачу</a>
+        <?endif;?>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>

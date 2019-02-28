@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();  // такой везде надо добавить?
     }
 }
-print_r($is_auth);
+
 /*
 if (!filter_var($form_auth['email'], FILTER_VALIDATE_EMAIL)) {
     $errors['email'] = 'E-mail введён некорректно';
@@ -80,8 +80,8 @@ $layout_content = include_template('layout.php', [
     'projects' => $projects,
     'tasks' => $tasks,
     'title' => 'Дела в порядке',
-    'user_name' => $user_name
+    'user_name' => $user_name,
+    'is_auth' => $is_auth
 ]);
 
 print($layout_content);
-

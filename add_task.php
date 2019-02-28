@@ -108,7 +108,8 @@ $layout_content = include_template('layout.php', [
     'projects' => $projects,
     'tasks' => $tasks,
     'title' => 'Дела в порядке',
-    'user_name' => $user_name
+    'user_name' => $user_name,
+    'is_auth' => $is_auth
 ]);
 
 print($layout_content);
