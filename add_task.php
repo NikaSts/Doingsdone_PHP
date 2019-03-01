@@ -2,17 +2,29 @@
 
 require_once 'init.php';
 
+$is_auth = 0;
+$user_name = '';
+
+if (!empty($_SESSION['id'])) {
+    $is_auth = 1;
+    $user_name = $_SESSION['name'];
+}
+
+$projects = [];
+$tasks = [];
 $error = '';
 
 if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
 } else {
-    $user_id = 1;
+    $user_id = $_SESSION['id'];
     $sql_projects = 'SELECT * FROM projects WHERE user_id = ?';
     $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
 
     $tasks = [];
-    $project_id = intval($_GET['project_id']);
+    if (isset($_GET['project_id'])) {
+        $project_id = intval($_GET['project_id']);
+    }
 
     $sql_tasks = 'SELECT * FROM tasks WHERE user_id = ?';
     $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
@@ -57,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!empty($form_task['date'])) {
         $delta = strtotime($form_task['date']) - strtotime(date('d.m.Y 00:00:00'));
-        if ($delta < 0) {
-            $errors['date'] = 'Надо ввести дату в будущем';
+        if ($delta < 0 || !check_date_format($form_task['date'])) {
+            $errors['date'] = 'Надо ввести дату в правильном формате';
         }
     }
 
@@ -98,6 +110,9 @@ $layout_content = include_template('layout.php', [
     'projects' => $projects,
     'tasks' => $tasks,
     'title' => 'Дела в порядке',
+    'user_name' => $user_name,
+    'sidebar' => true,
+    'is_auth' => $is_auth
 ]);
 
 print($layout_content);

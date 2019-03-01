@@ -28,9 +28,11 @@
 
     <table class="tasks">
         <? foreach ($tasks as $key => $val): ?>
-            <? if (($project_id = intval($_GET['project_id'])) && ($val['project_id'] != $project_id)) {
+            <? if (isset($_GET['project_id'])) {
+                $project_id = intval($_GET['project_id']);
+                if($val['project_id'] != $project_id) {
                 continue;
-            }
+            }}
             ?>
             <? if (!$val['is_done'] || $show_complete_tasks === 1): ?>
 
@@ -45,7 +47,9 @@
                     </td>
 
                     <td class="task__file">
-                        <a class="download-link" href="#">Home.psd</a>
+                        <?if ($val['file_link']):?>
+                        <a class="download-link" href="<?= $val['file_link'];?>"><?= $val['file_link']; ?></a>
+                        <?endif;?>
                     </td>
 
                     <td class="task__date"><?= date('Y', strtotime($val['time_limit'])) > 1970 ? date('d.m.Y', strtotime($val['time_limit'])) : ''; ?></td>

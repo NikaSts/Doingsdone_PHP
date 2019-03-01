@@ -2,6 +2,14 @@
 
 require_once 'init.php';
 
+$is_auth = 0;
+$user_name = '';
+
+if (!empty($_SESSION['id'])) {
+    $is_auth = 1;
+    $user_name = $_SESSION['name'];
+}
+
 $error = '';
 
 if (!$connect) {
@@ -39,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($form_register['password'])) {
         $errors['password'] = 'Это поле надо заполнить';
     } else {
-        $password = $form_register['password'];
+        $password = trim($form_register['password']);
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
     }
 
@@ -61,14 +69,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
     }
 
-    if ($result) {
-        header('Location: /');
+    if (isset($result)) {
+        header('Location: /auth.php');
     }
 }
 
-$layout_content = include_template('layout_non_auth.php', [
+$layout_content = include_template('layout.php', [
     'page_content' => $page_content,
     'title' => 'Форма регистрации',
+    'sidebar' => true,
+    'is_auth' => $is_auth
 ]);
 
 print($layout_content);

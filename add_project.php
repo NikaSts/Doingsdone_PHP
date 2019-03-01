@@ -2,17 +2,27 @@
 
 require_once 'init.php';
 
+$is_auth = 0;
+$user_name = '';
+
+if (!empty($_SESSION['id'])) {
+    $is_auth = 1;
+    $user_name = $_SESSION['name'];
+}
+
 $error = '';
 
 if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
 } else {
-    $user_id = 1;
+    $user_id = $_SESSION['id'];
     $sql_projects = 'SELECT * FROM projects WHERE user_id = ?';
     $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
 
     $tasks = [];
-    $project_id = intval($_GET['project_id']);
+    if (isset($_GET['project_id'])) {
+        $project_id = intval($_GET['project_id']);
+    }
 
     $sql_tasks = 'SELECT * FROM tasks WHERE user_id = ?';
     $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
@@ -36,6 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['name'] = 'Это поле надо заполнить';
     } else {
         $name = $form_project['name'];
+
+        $sql = "SELECT * FROM projects WHERE name = ?";
+        $matchFound = db_fetch_data($connect, $sql, [$name]);
+        if ($matchFound) {
+            $errors['name'] = 'Такой проект уже существует';
+        }
     }
 
     // смотрим длину массива с ошибками
@@ -60,6 +76,9 @@ $layout_content = include_template('layout.php', [
     'projects' => $projects,
     'tasks' => $tasks,
     'title' => 'Дела в порядке',
+    'user_name' => $user_name,
+    'sidebar' => true,
+    'is_auth' => $is_auth
 ]);
 
 print($layout_content);

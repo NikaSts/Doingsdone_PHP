@@ -9,53 +9,64 @@
     <link rel="stylesheet" href="/css/flatpickr.min.css">
 </head>
 
-<body>
+<body<?= isset($sidebar) && $sidebar !== false ? '' : ' class="body-background"'?>>
+
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
-    <div class="container container--with-sidebar">
+
+    <div class="container<?= isset($sidebar) && $sidebar !== false ? ' container--with-sidebar' : ''?>">
         <header class="main-header">
             <a href="/">
                 <img src="/img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
-
             <div class="main-header__side">
-                <a class="main-header__side-item button button--plus open-modal" href="/add_task.php">Добавить
-                    задачу</a>
+                <? if ($is_auth === 1): ?>
+                    <a class="main-header__side-item button button--plus open-modal" href="/add_task.php">Добавить
+                        задачу</a>
 
-                <div class="main-header__side-item user-menu">
-                    <div class="user-menu__image">
-                        <img src="/img/user.png" width="40" height="40" alt="Пользователь">
+                    <div class="main-header__side-item user-menu">
+                        <div class="user-menu__image">
+                            <img src="/img/user.png" width="40" height="40" alt="Пользователь">
+                        </div>
+
+                        <div class="user-menu__data">
+                            <p><?= $user_name; ?></p>
+                            <a href="/logout.php">Выйти</a>
+                        </div>
                     </div>
-
-                    <div class="user-menu__data">
-                        <p>Константин</p>
-
-                        <a href="/register.php">Выйти</a>
-
-                    </div>
-                </div>
+                <? else: ?>
+                    <a class="main-header__side-item button button--transparent" href="/auth.php">Войти</a>
+                <? endif; ?>
             </div>
+
         </header>
 
         <div class="content">
+            <?if (isset($sidebar) && $sidebar !== false):?>
             <section class="content__side">
-                <h2 class="content__side-heading">Проекты</h2>
-
-                <nav class="main-navigation">
-                    <ul class="main-navigation__list">
-                        <? foreach ($projects as $key => $val): ?>
-                            <li class="main-navigation__list-item">
-                                <a class="main-navigation__list-item-link" href="/index.php?project_id=<?= $val['id'] ?>"><?= $val['name']; ?></a>
-                                <span class="main-navigation__list-item-count"><?= calculate_amount($tasks, $val['id']); ?></span>
-                            </li>
-                        <? endforeach; ?>
-                    </ul>
-                </nav>
-
-                <a class="button button--transparent button--plus content__side-button"
-                   href="/add_project.php" target="project_add">Добавить проект</a>
+                <? if ($is_auth === 1): ?>
+                    <h2 class="content__side-heading">Проекты</h2>
+                    <nav class="main-navigation">
+                        <ul class="main-navigation__list">
+                            <? foreach ($projects as $key => $val): ?>
+                                <li class="main-navigation__list-item">
+                                    <a class="main-navigation__list-item-link"
+                                       href="/index.php?project_id=<?= $val['id'] ?>"><?= $val['name']; ?></a>
+                                    <span class="main-navigation__list-item-count"><?= calculate_amount($tasks, $val['id']); ?></span>
+                                </li>
+                            <? endforeach; ?>
+                        </ul>
+                    </nav>
+                    <a class="button button--transparent button--plus content__side-button"
+                       href="/add_project.php" target="project_add">Добавить проект</a>
+                <? else: ?>
+                    <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
+                    <a class="button button--transparent content__side-button"
+                       href="/auth.php">Войти</a>
+                <? endif; ?>
             </section>
+            <?endif?>
 
             <main class="content__main">
                 <?= $page_content; ?>
@@ -71,7 +82,9 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
+        <?if ($is_auth === 1):?>
         <a class="main-footer__button button button--plus" href="/add_task.php">Добавить задачу</a>
+        <?endif;?>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
