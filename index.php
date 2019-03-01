@@ -61,7 +61,7 @@ $layout_content = include_template('layout.php', [
     'tasks' => $tasks,
     'title' => 'Дела в порядке',
     'user_name' => $user_name,
-    'sidebar' => true,
+    'sidebar' => !!$is_auth,
     'is_auth' => $is_auth
 ]);
 
