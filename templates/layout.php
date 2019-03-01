@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="/css/flatpickr.min.css">
 </head>
 
-<body<?= $sidebar !== false ? '' : ' class="body-background"'?>>
+<body<?= isset($sidebar) && $sidebar !== false ? '' : ' class="body-background"'?>>
 
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
 
-    <div class="container<?= $sidebar !== false ? ' container--with-sidebar' : ''?>">
+    <div class="container<?= isset($sidebar) && $sidebar !== false ? ' container--with-sidebar' : ''?>">
         <header class="main-header">
             <a href="/">
                 <img src="/img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
@@ -43,7 +43,7 @@
         </header>
 
         <div class="content">
-            <?if ($sidebar !== false):?>
+            <?if (isset($sidebar) && $sidebar !== false):?>
             <section class="content__side">
                 <? if ($is_auth === 1): ?>
                     <h2 class="content__side-heading">Проекты</h2>

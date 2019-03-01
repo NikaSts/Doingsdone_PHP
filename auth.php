@@ -2,9 +2,10 @@
 
 require_once 'init.php';
 
-session_start();
 $is_auth = 0;
 $user_name = '';
+$sidebar = false;
+
 
 if (!empty($_SESSION['id'])) {
     $is_auth = 1;
@@ -52,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $page_content = include_template('auth.php', ['form' => $form_auth, 'errors' => $errors]);
     } else {
         header("Location: /");
-        exit();  // такой везде надо добавить?
+        exit();
     }
 }
 
@@ -77,10 +78,9 @@ if (!filter_var($form_auth['email'], FILTER_VALIDATE_EMAIL)) {
 
 $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
-    'projects' => $projects,
-    'tasks' => $tasks,
     'title' => 'Дела в порядке',
     'user_name' => $user_name,
+    'sidebar' => true,
     'is_auth' => $is_auth
 ]);
 

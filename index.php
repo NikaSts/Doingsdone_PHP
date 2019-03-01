@@ -24,14 +24,16 @@ if (!$connect) {
     $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
 
     $tasks = [];
-    $project_id = intval($_GET['project_id']);
+    if (isset($_GET['project_id'])) {
+        $project_id = intval($_GET['project_id']);
+    }
 
     $sql_tasks = "SELECT * FROM tasks WHERE user_id = ? ORDER BY id DESC";
     $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
     if (isset($_GET['project_id']) && !$project_id) {
         $error = '404';
         http_response_code(404);
-    } else if ($project_id) {
+    } else if (isset($project_id)) {
         $sql_tasks_count = "SELECT COUNT(*) as count FROM tasks WHERE user_id = ? AND project_id = ?";
         $task_count = db_fetch_data($connect, $sql_tasks_count, [$user_id, $project_id]);
         if (!$task_count[0]['count']) {
@@ -59,7 +61,7 @@ $layout_content = include_template('layout.php', [
     'tasks' => $tasks,
     'title' => 'Дела в порядке',
     'user_name' => $user_name,
-    'sidebar' => !!$is_auth,
+    'sidebar' => true,
     'is_auth' => $is_auth
 ]);
 

@@ -28,9 +28,11 @@
 
     <table class="tasks">
         <? foreach ($tasks as $key => $val): ?>
-            <? if (($project_id = intval($_GET['project_id'])) && ($val['project_id'] != $project_id)) {
+            <? if (isset($_GET['project_id'])) {
+                $project_id = intval($_GET['project_id']);
+                if($val['project_id'] != $project_id) {
                 continue;
-            }
+            }}
             ?>
             <? if (!$val['is_done'] || $show_complete_tasks === 1): ?>
 

@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
     }
 
-    if ($result) {
+    if (isset($result)) {
         header('Location: /auth.php');
     }
 }
@@ -77,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
     'title' => 'Форма регистрации',
+    'sidebar' => true,
     'is_auth' => $is_auth
 ]);
 

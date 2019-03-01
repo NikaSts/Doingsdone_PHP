@@ -20,7 +20,9 @@ if (!$connect) {
     $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
 
     $tasks = [];
-    $project_id = intval($_GET['project_id']);
+    if (isset($_GET['project_id'])) {
+        $project_id = intval($_GET['project_id']);
+    }
 
     $sql_tasks = 'SELECT * FROM tasks WHERE user_id = ?';
     $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
@@ -75,6 +77,7 @@ $layout_content = include_template('layout.php', [
     'tasks' => $tasks,
     'title' => 'Дела в порядке',
     'user_name' => $user_name,
+    'sidebar' => true,
     'is_auth' => $is_auth
 ]);
 
