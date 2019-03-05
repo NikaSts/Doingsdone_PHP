@@ -4,7 +4,8 @@
     <form class="form" action="/add_task.php" method="post" enctype="multipart/form-data">
         <div class="form__row">
             <label class="form__label" for="name">Название <sup>*</sup></label>
-            <input class="form__input <?= isset($errors['name']) ? " form__input--error" : '' ?>" type="text" name="name" id="name" value="<?= isset($_POST['name']) ? esc($_POST['name']) : ''; ?>"
+            <input class="form__input <?= isset($errors['name']) ? " form__input--error" : '' ?>" type="text"
+                   name="name" id="name" value="<?= isset($_POST['name']) ? esc($_POST['name']) : ''; ?>"
                    placeholder="Введите название">
             <? if (isset($errors['name'])): ?>
                 <p class="form__message"><?= $errors['name']; ?></p>
@@ -13,22 +14,24 @@
 
         <div class="form__row">
             <label class="form__label" for="project">Проект</label>
-            <select class="form__input form__input--select <?= isset($errors['project']) ? " form__input--error" : '' ?>" name="project" id="project">
+            <select class="form__input form__input--select <?= isset($errors['project']) ? " form__input--error" : '' ?>"
+                    name="project" id="project">
                 <option>Выберите проект</option>
                 <? foreach ($projects as $key => $val): ?>
-                <option value="<?= ($val['id']); ?>"<?= $val['id'] == $_POST['project'] ? ' selected' : '' ?>><?= ($val['name']); ?>
+                <option value="<?= ($val['id']); ?>" <? if (isset($_POST['project'])): ?><?= $val['id'] == $_POST['project'] ? ' selected' : '' ?><? endif; ?>><?= ($val['name']); ?>
                     <? endforeach; ?>
                 </option>
             </select>
-            <? if (isset($errors['project'])):?>
-                <p class="form__message"><?= $errors['project'];?></p>
+            <? if (isset($errors['project'])): ?>
+                <p class="form__message"><?= $errors['project']; ?></p>
             <? endif; ?>
         </div>
 
         <div class="form__row">
             <label class="form__label" for="date">Дата выполнения</label>
 
-            <input class="form__input form__input--date <?= isset($errors['date']) ? " form__input--error" : '' ?>" type="date" name="date" id="date" value="<?= isset($_POST['date']) ? esc($_POST['date']) : ''; ?>"
+            <input class="form__input form__input--date <?= isset($errors['date']) ? " form__input--error" : '' ?>"
+                   type="date" name="date" id="date" value="<?= isset($_POST['date']) ? esc($_POST['date']) : ''; ?>"
                    placeholder="Введите дату в формате ДД.ММ.ГГГГ">
             <? if (isset($errors['date'])): ?>
                 <p class="form__message"><?= $errors['date']; ?></p>
