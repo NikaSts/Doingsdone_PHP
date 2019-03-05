@@ -1,11 +1,10 @@
 <?php
-
 require_once 'init.php';
 
 $is_auth = 0;
 $user_name = '';
 
-if (!empty($_SESSION['id'])) {
+if (isset($_SESSION['id'])) {
     $is_auth = 1;
     $user_name = $_SESSION['name'];
 }
@@ -13,99 +12,75 @@ if (!empty($_SESSION['id'])) {
 $projects = [];
 $tasks = [];
 $error = '';
-$filters = [];
 
 if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
 } else if (isset($_SESSION['id'])) {
     $user_id = $_SESSION['id'];
-    $sql_projects = "SELECT * FROM projects WHERE user_id = ?";
+    $sql_projects = "SELECT *, (SELECT COUNT(*) FROM tasks as t WHERE t.project_id=projects.id) as cnt FROM projects WHERE user_id = ?";
     $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
 
-    $tasks = [];
     if (isset($_GET['project_id'])) {
         $project_id = intval($_GET['project_id']);
     }
 
-    $sql_tasks = "SELECT * FROM tasks WHERE user_id = ? ORDER BY id DESC";
-    $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
-
-    if (isset($_GET['project_id']) && !$project_id) {
-        $error = '404';
-        http_response_code(404);
-    } else if (isset($project_id)) {
-        $sql_tasks_count = "SELECT COUNT(*) as count FROM tasks WHERE user_id = ? AND project_id = ?";
-        $task_count = db_fetch_data($connect, $sql_tasks_count, [$user_id, $project_id]);
-        if (!$task_count[0]['count']) {
-            $error = '404';
-            http_response_code(404);
-        }
-    }
-
-    if (isset($_GET['filter_task'])) {
-        $filter_task = $_GET['filter_task'];
-        if ($filter_task = 'today') {
-            $from = date('Y-m-d 00:00:00, strtotime(now)');
-            $to = date('Y-m-d 00:00:00, strtotime(+1 day)');
-            $sql = 'SELECT * FROM tasks WHERE time_limit >= ? AND time_limit < ?';
-            db_fetch_data($connect, $sql, [$from, $to]);
-        } else if ($filter_task = 'tomorrow') {
-            $from = date('Y-m-d 00:00:00, strtotime(+1 day)');
-            $to = date('Y-m-d 00:00:00, strtotime(+2 day)');
-            $sql = 'SELECT * FROM tasks WHERE time_limit >= ? AND time_limit < ?';
-            db_fetch_data($connect, $sql, [$from, $to]);
-        } else if ($filter_task = 'overdue') {
-            $to = date('Y-m-d 00:00:00, strtotime(to)');
-            $sql = 'SELECT * FROM tasks WHERE time_limit > "1970-01-01 23:59:59" AND time_limit < ? AND is_done IS NULL';
-            db_fetch_data($connect, $sql, [$to]);
-        }
-    }
-
+    //показывать ли выполненные задачи
     $show_complete_tasks = 0;
-
     if (isset($_GET['show_completed'])) {
         $show_complete_tasks = intval($_GET['show_completed']);
     }
-    //   $task_id = '';
+
+    //выполнение задачи
     if (isset($_GET['task_id']) && isset($_GET['check'])) {
-        $task_id = intval($_GET['task_id']);
+        if ($task_id = intval($_GET['task_id'])) {
+            $task = db_fetch_data($connect, 'SELECT now_status FROM tasks WHERE id = ?', [$task_id])[0];
+            if ($task) {
+                $sql_close_task = 'UPDATE tasks SET now_status = ?, is_done = NOW() WHERE id = ?';
+                $status = $task['now_status'] ? '0' : '1';
+                db_insert_data($connect, $sql_close_task, [$status, $task_id]);
+            }
+        }
     }
-    if (isset($_GET['check']) && ($_GET['check'] == 1)) {
-        $sql = "UPDATE tasks SET is_done = now(), now_status = '1' WHERE id = ?";
-        db_fetch_data($connect, $sql, [$task_id]);
+
+    //получение списка задач пользователя
+    $sql_tasks = "SELECT * FROM tasks WHERE user_id = ? ORDER BY id DESC";
+    if (isset($_GET['tasks_switch'])) {
+        switch ($_GET['tasks_switch']) {
+            case 'today':
+                $sql_tasks = "SELECT * FROM tasks WHERE time_limit >= DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00') AND time_limit <= DATE_FORMAT(NOW(), '%Y-%m-%d 23:59:59') AND user_id = ? ORDER BY id DESC";
+                break;
+            case 'tomorrow':
+                $sql_tasks = "SELECT * FROM tasks WHERE time_limit >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL -1 DAY), '%Y-%m-%d 00:00:00') AND time_limit <= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL -1 DAY), '%Y-%m-%d 23:59:59') AND user_id = ? ORDER BY id DESC";
+                break;
+            case 'overdue':
+                $sql_tasks = "SELECT * FROM tasks WHERE now_status <> '1' AND time_limit < NOW() AND YEAR(time_limit) > '1970' AND user_id = ? ORDER BY id DESC";
+                break;
+        }
     }
-    if (isset($_GET['check']) && ($_GET['check'] == 0)) {
-        $sql = "UPDATE tasks SET is_done = NULL, now_status = '0' WHERE id = ?";
-        db_fetch_data($connect, $sql, [$task_id]);
+
+    $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
+    if (isset($_GET['project_id']) && !$project_id) {
+        $error = '404';
+        http_response_code(404);
     }
 }
-
-/*
- * if (isset($_GET['task_id']) && isset($_GET['check'])) {
-        $task_id = intval($_GET['task_id']);
-        $checked = intval($_GET['check']);
-        $is_done = '';
-        if ($checked == 1) {
-            $is_done = 'now()';
-        } else {
-            $is_done = 'NULL';
-        }
-        $sql = "UPDATE tasks SET is_done = ?, now_status = ? WHERE id = ?";
-        $result = db_fetch_data($connect, $sql, [$is_done, $checked, $task_id]);
-    }
- */
 
 if ($error) {
     $page_content = include_template('error.php', [
         'error' => $error
     ]);
 } else {
-    $page_content = include_template($is_auth ? 'index.php' : 'guest.php', [
-        'show_complete_tasks' => $show_complete_tasks,
-        'tasks' => $tasks,
-    ]);
+    if ($is_auth) {
+        $tasks_menu = require_once 'index_tasks_menu.php';
+        $page_content = include_template('index.php', [
+            'show_complete_tasks' => $show_complete_tasks,
+            'tasks_menu' => $tasks_menu,
+            'tasks' => $tasks
+        ]);
+    } else {
+        $page_content = include_template('guest.php', []);
+    }
 }
-
 
 $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
