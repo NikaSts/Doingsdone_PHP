@@ -55,7 +55,7 @@ function time_counter($date)
         return false;
     }
 
-    return time() - strtotime($date) >= 0 ? true : false;
+    return strtotime($date) - time() <= 86400 ? true : false;
 }
 
 /**

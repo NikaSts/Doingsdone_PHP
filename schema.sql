@@ -29,11 +29,11 @@ CREATE TABLE tasks
   user_id    INT       NOT NULL
 );
 CREATE UNIQUE INDEX users_email ON users (email);
-CREATE INDEX users_name ON users (name);
 CREATE INDEX projects_name ON projects (name);
+CREATE INDEX user_id ON projects (user_id);
+CREATE INDEX user_id ON tasks (user_id);
 CREATE INDEX tasks_name ON tasks (name);
 CREATE INDEX tasks_now_status ON tasks (now_status);
 CREATE INDEX tasks_time_limit ON tasks (time_limit);
-CREATE INDEX tasks_is_created ON tasks (is_created);
 CREATE INDEX tasks_is_done ON tasks (is_done);
 

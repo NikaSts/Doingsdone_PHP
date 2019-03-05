@@ -22,7 +22,7 @@ $tasks_menu = [
     ]
 ];
 
-foreach($tasks_menu as &$menu) {
+foreach ($tasks_menu as &$menu) {
     $tasks_switch = '';
     if (isset($_GET['tasks_switch'])) {
         $tasks_switch = $_GET['tasks_switch'];

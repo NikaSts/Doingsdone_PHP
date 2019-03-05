@@ -36,7 +36,7 @@
             ?>
             <? if (!$val['now_status'] || $show_complete_tasks === 1): ?>
                 <?$showed = true;?>
-                <tr class="tasks__item task <?= $val['now_status'] ? " task--completed" : '' ?><?= time_counter($val['time_limit']) && !$val['now_status'] ? " task--important" : '' ?>">
+                <tr class="tasks__item task <?= $val['now_status'] ? " task--completed" : '' ?><?= $val['time_limit'] !== '1970-01-01 23:59:59' && time_counter($val['time_limit']) && !$val['now_status'] ? " task--important" : '' ?>">
                     <td class="task__select">
                         <label class="checkbox task__checkbox">
                             <input class="checkbox__input visually-hidden task__checkbox"
