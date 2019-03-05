@@ -33,10 +33,11 @@ if (!$connect) {
     //выполнение задачи
     if (isset($_GET['task_id']) && isset($_GET['check'])) {
         if ($task_id = intval($_GET['task_id'])) {
-            $task = db_fetch_data($connect, "SELECT now_status FROM tasks WHERE id = ?", [$task_id])[0];
+            $task = db_fetch_data($connect, 'SELECT now_status FROM tasks WHERE id = ?', [$task_id])[0];
             if ($task) {
-                $sql_close_task = "UPDATE tasks SET now_status = ?, is_done = NOW() WHERE id = ?";
-                db_insert_data($connect, $sql_close_task, [(string)!$task['now_status'], $task_id]);
+                $sql_close_task = 'UPDATE tasks SET now_status = ?, is_done = NOW() WHERE id = ?';
+                $status = $task['now_status'] ? '0' : '1';
+                db_insert_data($connect, $sql_close_task, [$status, $task_id]);
             }
         }
     }
@@ -52,7 +53,7 @@ if (!$connect) {
                 $sql_tasks = "SELECT * FROM tasks WHERE time_limit >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL -1 DAY), '%Y-%m-%d 00:00:00') AND time_limit <= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL -1 DAY), '%Y-%m-%d 23:59:59') AND user_id = ? ORDER BY id DESC";
                 break;
             case 'overdue':
-                $sql_tasks = "SELECT * FROM tasks WHERE time_limit > '1970-01-01 23:59:59' AND time_limit < NOW() AND user_id = ? ORDER BY id DESC";
+                $sql_tasks = "SELECT * FROM tasks WHERE now_status <> '1' AND time_limit < NOW() AND user_id = ? ORDER BY id DESC";
                 break;
         }
     }

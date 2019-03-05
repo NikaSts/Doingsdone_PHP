@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $form_task['name'],
             $project_id,
             $path,
-            date('Y.m.d 23:59:59', strtotime($form_task['date'])),
+            date('Y.m.d 00:00:00', strtotime($form_task['date'])),
             $user_id
         ]);
 
