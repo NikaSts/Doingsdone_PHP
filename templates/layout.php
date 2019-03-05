@@ -49,11 +49,17 @@
                     <h2 class="content__side-heading">Проекты</h2>
                     <nav class="main-navigation">
                         <ul class="main-navigation__list">
+                            <?
+                            $project_id = 0;
+                            if (isset($_GET['project_id'])) {
+                                $project_id = intval($_GET['project_id']);
+                            }
+                            ?>
                             <? foreach ($projects as $key => $val): ?>
-                                <li class="main-navigation__list-item">
+                                <li class="main-navigation__list-item<?=$val['id'] == $project_id ? ' main-navigation__list-item--active':''?>">
                                     <a class="main-navigation__list-item-link"
                                        href="/index.php?project_id=<?= $val['id'] ?>"><?= $val['name']; ?></a>
-                                    <span class="main-navigation__list-item-count"><?= calculate_amount($tasks, $val['id']); ?></span>
+                                    <span class="main-navigation__list-item-count"><?= $val['cnt']; ?></span>
                                 </li>
                             <? endforeach; ?>
                         </ul>

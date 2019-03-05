@@ -42,3 +42,18 @@ $tasks = [
         'is_done' => false
     ]
 ];
+
+
+function p($debug_data, $die = true) {
+    if ($die === true && ob_get_contents()) {
+        while (ob_get_contents()) {
+            ob_end_clean();
+        }
+    }
+
+    ?><pre><?print_r($debug_data)?></pre><?
+
+    if ($die === true) {
+        die;
+    }
+}
