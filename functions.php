@@ -25,7 +25,7 @@ function include_template($name, $data)
 }
 
 /**
- * Считет количество задач у каждого из проектов
+ * Считает количество задач у каждого из проектов
  * @param $tasks
  * @param $project
  * @return int
@@ -45,21 +45,17 @@ function calculate_amount($tasks, $project)
 }
 
 /**
- * функция расчета времени до запланированного задания
+ * Определяет, истек ли срок выполнения задания
  * @param $date
  * @return bool
  */
 function time_counter($date)
 {
-    if ($date === NULL) {
+    if (!$date) {
         return false;
     }
-    $time_left = floor((strtotime($date) - time()) / 3600);
-    if (0 < $time_left && $time_left <= 24) {
-        return true;
-    } else {
-        return false;
-    }
+
+    return time() - strtotime($date) >= 0 ? true : false;
 }
 
 /**
@@ -122,8 +118,4 @@ function check_date_format($date) {
     }
     return $result;
 }
-check_date_format("04.02.2019"); // true
-check_date_format("15.23.1989"); // false
-check_date_format("1989-15-02"); // false
-
 
