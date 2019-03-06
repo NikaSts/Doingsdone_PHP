@@ -42,7 +42,7 @@ if (!$connect) {
                 $sql_tasks = "SELECT * FROM tasks WHERE time_limit >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL -1 DAY), '%Y-%m-%d 00:00:00') AND time_limit <= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL -1 DAY), '%Y-%m-%d 23:59:59') AND user_id = ?";
                 break;
             case 'overdue':
-                $sql_tasks = "SELECT * FROM tasks WHERE now_status <> '1' AND time_limit < NOW() AND YEAR(time_limit) > '1970' AND user_id = ?";
+                $sql_tasks = "SELECT * FROM tasks WHERE now_status <> '1' AND time_limit < CURRENT_DATE() AND YEAR(time_limit) > '1970' AND user_id = ?";
                 break;
         }
     }
@@ -73,7 +73,7 @@ if ($error) {
         'error' => $error
     ]);
 } else {
-    if ($is_auth === 1) {
+    if ($is_auth) {
         $tasks_menu = require_once 'index_tasks_menu.php';
         $page_content = include_template('index.php', [
             'show_complete_tasks' => $show_complete_tasks,

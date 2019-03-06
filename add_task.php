@@ -7,7 +7,6 @@ if ($is_auth !== 1 || !$user_id) {
 }
 
 $projects = [];
-$tasks = [];
 $error = '';
 
 if (!$connect) {
@@ -16,15 +15,10 @@ if (!$connect) {
     $sql_projects = 'SELECT *, (SELECT COUNT(*) FROM tasks as t WHERE t.project_id=projects.id) as cnt FROM projects WHERE user_id = ?';
     $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
 
-    $tasks = [];
     if (isset($_GET['project_id'])) {
         $project_id = intval($_GET['project_id']);
     }
-
-    $sql_tasks = 'SELECT * FROM tasks WHERE user_id = ?';
-    $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
 }
-
 if ($error) {
     $page_content = include_template('error.php', [
         'error' => $error
