@@ -2,12 +2,8 @@
 
 require_once 'init.php';
 
-$is_auth = 0;
-$user_name = '';
-
-if (!empty($_SESSION['id'])) {
-    $is_auth = 1;
-    $user_name = $_SESSION['name'];
+if ($is_auth === 1) {
+    header('Location: /');
 }
 
 $error = '';
@@ -21,7 +17,7 @@ if (!$connect) {
     $page_content = include_template('register.php', []);
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form_register = $_POST;
     $errors = [];
 
@@ -61,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (count($errors) > 0) {
         $page_content = include_template('register.php', ['errors' => $errors]);
     } else {
-        $sql = 'INSERT INTO users ( signed_up, email, name, password) VALUES (now(), ?, ?, ?)';
+        $sql = 'INSERT INTO users (signed_up, email, name, password) VALUES (NOW(), ?, ?, ?)';
         $result = db_insert_data($connect, $sql, [
             $form_register['email'],
             $form_register['name'],

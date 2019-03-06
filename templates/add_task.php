@@ -22,9 +22,10 @@
                     intval($_POST['project']);
                 }
                 ?>
-                <option value="<?= ($val['id']); ?>"<?= $val['id'] == $selected_project ? ' selected' : '' ?>><?= ($val['name']); ?>
-                    <? endforeach; ?>
+                <option value="<?= ($val['id']); ?>"<?= $val['id'] == $selected_project ? ' selected' : '' ?>>
+                    <?= esc($val['name']); ?>
                 </option>
+                <? endforeach; ?>
             </select>
             <? if (isset($errors['project'])):?>
                 <p class="form__message"><?= $errors['project'];?></p>
