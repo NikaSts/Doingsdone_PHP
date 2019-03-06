@@ -47,6 +47,7 @@ if (!$connect) {
         }
     }
 
+    // получение списка задач для кадого из проектов пользователя
     $project_id = 0;
     if (isset($_GET['project_id'])) {
         $project_id = intval($_GET['project_id']);
@@ -58,10 +59,17 @@ if (!$connect) {
         if (count($find_project)) {
             $sql_tasks .= " AND project_id = ?";
             $arData[] = $project_id;
-        }
-        else {
+        } else {
             http_response_code(404);
         }
+    }
+
+    //поиск по задачам
+    $search = '';
+    if (isset($_GET['search'])) {
+        $search = $_GET['search'];
+        $sql_tasks .= " AND MATCH(name) AGAINST(? IN BOOLEAN MODE)";
+        $arData[] = $search;
     }
 
     $sql_tasks .= " ORDER BY id DESC";

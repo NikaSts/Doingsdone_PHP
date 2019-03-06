@@ -37,3 +37,4 @@ CREATE INDEX tasks_now_status ON tasks (now_status);
 CREATE INDEX tasks_time_limit ON tasks (time_limit);
 CREATE INDEX tasks_is_done ON tasks (is_done);
 
+CREATE FULLTEXT INDEX search ON tasks (name);
