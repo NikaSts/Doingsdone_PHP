@@ -1,0 +1,12 @@
+{
+    "name": "nefila/501771-doingsdone",
+    "authors": [
+        {
+            "name": "Veronika Stasyuk",
+            "email": "veronika.sts@gmail.com"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.1"
+    }
+}
