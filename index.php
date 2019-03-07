@@ -12,18 +12,12 @@ if (!$connect) {
     $sql_projects = "SELECT *, (SELECT COUNT(*) FROM tasks as t WHERE t.project_id=projects.id) as cnt FROM projects WHERE user_id = ?";
     $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
 
-    //показывать ли выполненные задачи
-    $show_complete_tasks = 0;
-    if (isset($_GET['show_completed'])) {
-        $show_complete_tasks = intval($_GET['show_completed']);
-    }
-
     //выполнение задачи
     if (isset($_GET['task_id']) && isset($_GET['check'])) {
         if ($task_id = intval($_GET['task_id'])) {
-            $task = db_fetch_data($connect, 'SELECT now_status FROM tasks WHERE id = ?', [$task_id]);
+            $task = db_fetch_data($connect, "SELECT now_status FROM tasks WHERE id = ? AND user_id = ?", [$task_id, $user_id]);
             if (count($task)) {
-                $sql_close_task = 'UPDATE tasks SET now_status = ?, is_done = NOW() WHERE id = ?';
+                $sql_close_task = "UPDATE tasks SET now_status = ?, is_done = NOW() WHERE id = ?";
                 $status = $task[0]['now_status'] ? '0' : '1';
                 db_insert_data($connect, $sql_close_task, [$status, $task_id]);
             }
@@ -62,6 +56,18 @@ if (!$connect) {
         } else {
             http_response_code(404);
         }
+    }
+
+    //показывать ли выполненные задачи
+    $show_complete_tasks = 0;
+    if (isset($_GET['show_completed'])) {
+        if ($_GET['show_completed'] == '1') {
+            $sql_tasks .= " AND now_status = '1'";
+            $show_complete_tasks = 1;
+        }
+    }
+    if (!$show_complete_tasks) {
+        $sql_tasks .= " AND now_status <> '1'";
     }
 
     //поиск по задачам
