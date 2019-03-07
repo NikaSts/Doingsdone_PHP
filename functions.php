@@ -25,26 +25,6 @@ function include_template($name, $data)
 }
 
 /**
- * Считает количество задач у каждого из проектов
- * @param $tasks
- * @param $project
- * @return int
- */
-function calculate_amount($tasks, $project)
-{
-    $amount = 0;
-    foreach ($tasks as $value) {
-        if (!isset($value['project_id'])) {
-            continue;
-        }
-        if ($value['project_id'] === $project) {
-            $amount++;
-        }
-    }
-    return $amount;
-}
-
-/**
  * Определяет, истек ли срок выполнения задания
  * @param $date
  * @return bool

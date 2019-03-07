@@ -1,10 +1,10 @@
 <main class="content__main">
     <h2 class="content__main-heading">Список задач</h2>
 
-    <form class="search-form" action="index.php" method="post">
-        <input class="search-form__input" type="text" name="" value="" placeholder="Поиск по задачам">
+    <form class="search-form" action="index.php" method="get">
+        <input class="search-form__input" type="text" name="search" value="<?= isset($_GET['search']) ? esc($_GET['search']) : '' ?>" placeholder="Поиск по задачам">
 
-        <input class="search-form__submit" type="submit" name="" value="Искать">
+        <input class="search-form__submit" type="submit" name="" value="">
     </form>
 
     <div class="tasks-controls">
@@ -28,13 +28,6 @@
     <?$showed = false;?>
     <table class="tasks">
         <? foreach ($tasks as $key => $val): ?>
-            <? if (isset($_GET['project_id'])) {
-                $project_id = intval($_GET['project_id']);
-                if($val['project_id'] != $project_id) {
-                continue;
-            }}
-            ?>
-            <? if (!$val['now_status'] || $show_complete_tasks === 1): ?>
                 <?$showed = true;?>
                 <tr class="tasks__item task <?= $val['now_status'] ? " task--completed" : '' ?><?= date('Y', strtotime($val['time_limit'])) > 1970 && time_counter($val['time_limit']) && !$val['now_status'] ? " task--important" : '' ?>">
                     <td class="task__select">
@@ -52,7 +45,6 @@
                     </td>
                     <td class="task__date"><?= date('Y', strtotime($val['time_limit'])) > 1970 ? date('d.m.Y', strtotime($val['time_limit'])) : ''; ?></td>
                 </tr>
-            <? endif; ?>
         <? endforeach; ?>
     </table>
     <?if (!$showed):?>

@@ -1,13 +1,6 @@
 <?php
+
 require_once 'init.php';
-
-$is_auth = 0;
-$user_name = '';
-
-if (isset($_SESSION['id'])) {
-    $is_auth = 1;
-    $user_name = $_SESSION['name'];
-}
 
 $projects = [];
 $tasks = [];
@@ -15,54 +8,77 @@ $error = '';
 
 if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
-} else if (isset($_SESSION['id'])) {
-    $user_id = $_SESSION['id'];
+} else if ($is_auth === 1 && $user_id > 0) {
     $sql_projects = "SELECT *, (SELECT COUNT(*) FROM tasks as t WHERE t.project_id=projects.id) as cnt FROM projects WHERE user_id = ?";
     $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
-
-    if (isset($_GET['project_id'])) {
-        $project_id = intval($_GET['project_id']);
-    }
-
-    //показывать ли выполненные задачи
-    $show_complete_tasks = 0;
-    if (isset($_GET['show_completed'])) {
-        $show_complete_tasks = intval($_GET['show_completed']);
-    }
 
     //выполнение задачи
     if (isset($_GET['task_id']) && isset($_GET['check'])) {
         if ($task_id = intval($_GET['task_id'])) {
-            $task = db_fetch_data($connect, 'SELECT now_status FROM tasks WHERE id = ?', [$task_id])[0];
-            if ($task) {
-                $sql_close_task = 'UPDATE tasks SET now_status = ?, is_done = NOW() WHERE id = ?';
-                $status = $task['now_status'] ? '0' : '1';
+            $task = db_fetch_data($connect, "SELECT now_status FROM tasks WHERE id = ? AND user_id = ?", [$task_id, $user_id]);
+            if (count($task)) {
+                $sql_close_task = "UPDATE tasks SET now_status = ?, is_done = NOW() WHERE id = ?";
+                $status = $task[0]['now_status'] ? '0' : '1';
                 db_insert_data($connect, $sql_close_task, [$status, $task_id]);
             }
         }
     }
 
     //получение списка задач пользователя
-    $sql_tasks = "SELECT * FROM tasks WHERE user_id = ? ORDER BY id DESC";
+    $arData = [$user_id];
+    $sql_tasks = "SELECT * FROM tasks WHERE user_id = ?";
     if (isset($_GET['tasks_switch'])) {
         switch ($_GET['tasks_switch']) {
             case 'today':
-                $sql_tasks = "SELECT * FROM tasks WHERE time_limit >= DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00') AND time_limit <= DATE_FORMAT(NOW(), '%Y-%m-%d 23:59:59') AND user_id = ? ORDER BY id DESC";
+                $sql_tasks = "SELECT * FROM tasks WHERE time_limit >= DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00') AND time_limit <= DATE_FORMAT(NOW(), '%Y-%m-%d 23:59:59') AND user_id = ?";
                 break;
             case 'tomorrow':
-                $sql_tasks = "SELECT * FROM tasks WHERE time_limit >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL -1 DAY), '%Y-%m-%d 00:00:00') AND time_limit <= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL -1 DAY), '%Y-%m-%d 23:59:59') AND user_id = ? ORDER BY id DESC";
+                $sql_tasks = "SELECT * FROM tasks WHERE time_limit >= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL -1 DAY), '%Y-%m-%d 00:00:00') AND time_limit <= DATE_FORMAT(DATE_SUB(NOW(), INTERVAL -1 DAY), '%Y-%m-%d 23:59:59') AND user_id = ?";
                 break;
             case 'overdue':
-                $sql_tasks = "SELECT * FROM tasks WHERE now_status <> '1' AND time_limit < NOW() AND YEAR(time_limit) > '1970' AND user_id = ? ORDER BY id DESC";
+                $sql_tasks = "SELECT * FROM tasks WHERE now_status <> '1' AND time_limit < CURRENT_DATE() AND YEAR(time_limit) > '1970' AND user_id = ?";
                 break;
         }
     }
 
-    $tasks = db_fetch_data($connect, $sql_tasks, [$user_id]);
-    if (isset($_GET['project_id']) && !$project_id) {
-        $error = '404';
-        http_response_code(404);
+    // получение списка задач для кадого из проектов пользователя
+    $project_id = 0;
+    if (isset($_GET['project_id'])) {
+        $project_id = intval($_GET['project_id']);
     }
+
+    if ($project_id > 0) {
+        $sql_find_project = "SELECT id FROM projects WHERE id = ?";
+        $find_project = db_fetch_data($connect, $sql_find_project, [$project_id]);
+        if (count($find_project)) {
+            $sql_tasks .= " AND project_id = ?";
+            $arData[] = $project_id;
+        } else {
+            http_response_code(404);
+        }
+    }
+
+    //показывать ли выполненные задачи
+    $show_complete_tasks = 0;
+    if (isset($_GET['show_completed'])) {
+        if ($_GET['show_completed'] === '1') {
+            $show_complete_tasks = 1;
+        }
+    }
+    if (!$show_complete_tasks) {
+        $sql_tasks .= " AND now_status <> '1'";
+    }
+
+    //поиск по задачам
+    $search = '';
+    if (isset($_GET['search'])) {
+        $search = trim($_GET['search']);
+        $sql_tasks .= " AND MATCH(name) AGAINST(? IN BOOLEAN MODE)";
+        $arData[] = $search;
+    }
+
+    $sql_tasks .= " ORDER BY id DESC";
+    $tasks = db_fetch_data($connect, $sql_tasks, $arData);
 }
 
 if ($error) {
@@ -85,9 +101,7 @@ if ($error) {
 $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
     'projects' => $projects,
-    'tasks' => $tasks,
     'title' => 'Дела в порядке',
-    'user_name' => $user_name,
     'sidebar' => !!$is_auth,
     'is_auth' => $is_auth
 ]);

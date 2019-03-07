@@ -2,14 +2,11 @@
 
 require_once 'init.php';
 
-$is_auth = 0;
-$user_name = '';
-$sidebar = false;
-
-
-if (!empty($_SESSION['id'])) {
-    $is_auth = 1;
+if ($is_auth === 1) {
+    header('Location: /');
 }
+
+$sidebar = false;
 
 $error = '';
 
@@ -22,8 +19,7 @@ if (!$connect) {
     $page_content = include_template('auth.php', []);
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form_auth = $_POST;
     $required = ['email', 'password'];
     $errors = [];
@@ -35,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $email = $form_auth['email'];
-    $sql = "SELECT * FROM users WHERE email = ?";
+    $sql = 'SELECT * FROM users WHERE email = ?';
     $matchFound = db_fetch_data($connect, $sql, [$email]);
 
     if (!count($errors) && $matchFound) {
@@ -48,38 +44,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors['email'] = 'Пользователя с таким e-mail нет на сайте';
     }
 
-
     if (count($errors)) {
         $page_content = include_template('auth.php', ['form' => $form_auth, 'errors' => $errors]);
     } else {
-        header("Location: /");
+        header('Location: /');
         exit();
     }
 }
 
-/*
-if (!filter_var($form_auth['email'], FILTER_VALIDATE_EMAIL)) {
-    $errors['email'] = 'E-mail введён некорректно';
-    $errors['password'] = false;
-} else {
-    $email = $form_auth['email'];
-    $sql = "SELECT * FROM users WHERE email = ?";
-    $matchFound = db_fetch_data($connect, $sql, [$email]);
-    foreach ($matchFound as $keys) {
-        $password = $matchFound[0]['password'];
-    }
-    if (!$matchFound) {
-        $errors['email'] = 'Пользователя с таким e-mail нет на сайте';
-        $errors['password'] = false;
-    } else if ($matchFound && !password_verify(trim($matchFound['password']), $form_auth['password'])) {
-        $errors['password'] = 'Введен неверный пароль';
-    }
-*/
-
 $layout_content = include_template('layout.php', [
     'page_content' => $page_content,
     'title' => 'Дела в порядке',
-    'user_name' => $user_name,
     'sidebar' => true,
     'is_auth' => $is_auth
 ]);

@@ -39,11 +39,6 @@ foreach($tasks_menu as &$menu) {
     if (isset($_GET['project_id'])) {
         $query_data['project_id'] = intval($_GET['project_id']);
     }
-    if (isset($_GET['show_completed'])) {
-        if ($_GET['show_completed'] === '1') {
-            $query_data['show_completed'] = '1';
-        }
-    }
 
     if (count($query_data)) {
         $menu['url'] = '/index.php?' . http_build_query($query_data);
