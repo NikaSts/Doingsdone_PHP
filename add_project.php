@@ -38,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $name = $form_project['name'];
 
-        $sql = 'SELECT * FROM projects WHERE name = ?';
-        $matchFound = db_fetch_data($connect, $sql, [$name]);
+        $sql = 'SELECT * FROM projects WHERE name = ? AND user_id = ?';
+        $matchFound = db_fetch_data($connect, $sql, [$name, $user_id]);
         if ($matchFound) {
             $errors['name'] = 'Такой проект уже существует';
         }
