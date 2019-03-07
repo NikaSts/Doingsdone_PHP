@@ -61,8 +61,7 @@ if (!$connect) {
     //показывать ли выполненные задачи
     $show_complete_tasks = 0;
     if (isset($_GET['show_completed'])) {
-        if ($_GET['show_completed'] == '1') {
-            $sql_tasks .= " AND now_status = '1'";
+        if ($_GET['show_completed'] === '1') {
             $show_complete_tasks = 1;
         }
     }
