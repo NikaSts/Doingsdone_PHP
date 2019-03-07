@@ -73,7 +73,7 @@ if (!$connect) {
     $search = '';
     if (isset($_GET['search'])) {
         $search = trim($_GET['search']);
-        $sql_tasks .= " AND MATCH(name) AGAINST(? IN BOOLEAN MODE)";
+        $sql_tasks .= " AND MATCH(name) AGAINST(?)";
         $arData[] = $search;
     }
 
