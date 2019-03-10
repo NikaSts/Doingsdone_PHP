@@ -12,28 +12,40 @@ $mailer = new Swift_Mailer($transport);
 $logger = new Swift_Plugins_Loggers_ArrayLogger();
 $mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
 
-$sql = "SELECT tasks.name AS title, tasks.time_limit AS time_limit, users.name AS name, users.email AS email 
-FROM tasks JOIN users ON tasks.user_id = users.id 
-WHERE tasks.now_status = '0' AND tasks.time_limit = CURRENT_DATE() AND YEAR(tasks.time_limit) > '1970' 
-GROUP BY user_id";
+//получаем пользователей с истекающими задачами
+$sql = "SELECT users.id, users.name, users.email, tasks.name AS title, tasks.time_limit 
+FROM users JOIN tasks ON tasks.user_id = users.id 
+WHERE tasks.now_status = '0' AND tasks.time_limit = CURRENT_DATE()";
 
-$result = mysqli_query($connect, $sql);
+$res = db_fetch_data($connect, $sql, []);
 
-if ($result && mysqli_num_rows($result)) {
-    $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
+if ($res) {
+    $users = [];
 
-    $recipients = [];
-    foreach ($tasks as $key => $val) {
-        $recipients[$val['email']] = $val['name'];
+    //формируем массив с данными пользователя
+    foreach ($res as $key) {
+        $users[$key['id']]['name'] = $key['name'];
+        $users[$key['id']]['email'] = $key['email'];
+        $users[$key['id']]['time_limit'] = $key['time_limit'];
+        $users[$key['id']]['tasks'][] = $key['title'];
+    }
 
+    //перебираем массив подставляя значения в письмо
+    foreach ($users as $user) {
         $message = new Swift_Message();
         $message->setSubject("Уведомление от сервиса «Дела в порядке»");
         $message->setFrom(['keks@phpdemo.ru' => 'DoingsDone']);
-        $message->setTo($recipients);
+        $message->setTo($user['email']);
 
- //       $message_content = "'<b>Уважаемый, ' . $val['name'] . '.'<b><br><p>У вас запланирована задача ' . $val['title'] . 'на ' . $val['time_limit'] . '.'</p>";
-    $message->addPart($message_content, 'text/html');
-
+        $greeting = 'Уважаемый, ' . $user['name'];
+        $text_body = 'У вас запланирована задача: ';
+        $date = 'на' . $user['time_limit'];
+        $task = '';
+        foreach ($tasks as $task) {
+            $message_content = $greeting . #text_body . $task . $date;
+                $message->addPart($message_content, 'text/html');
+        }
+    }
     $result = $mailer->send($message);
 
     if ($result) {
@@ -42,5 +54,5 @@ if ($result && mysqli_num_rows($result)) {
         print("Не удалось отправить рассылку: " . $logger->dump());
     }
 }
-}
+
 
