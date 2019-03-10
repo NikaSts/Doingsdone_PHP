@@ -11,8 +11,7 @@ $error = '';
 if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
 } else {
-    $sql_projects = 'SELECT *, (SELECT COUNT(*) FROM tasks as t WHERE t.project_id=projects.id) as cnt FROM projects WHERE user_id = ?';
-    $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
+    $projects = get_projects($connect, $user_id);
 
     if (isset($_GET['project_id'])) {
         $project_id = intval($_GET['project_id']);

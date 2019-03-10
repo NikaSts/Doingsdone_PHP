@@ -12,8 +12,7 @@ $error = '';
 if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
 } else {
-    $sql_projects = 'SELECT *, (SELECT COUNT(*) FROM tasks as t WHERE t.project_id=projects.id) as cnt FROM projects WHERE user_id = ?';
-    $projects = db_fetch_data($connect, $sql_projects, [$user_id]);
+    $projects = get_projects($connect, $user_id);
 
     if (isset($_GET['project_id'])) {
         $project_id = intval($_GET['project_id']);
@@ -42,16 +41,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $name = $form_task['name'];
     }
 
-    // проверяем, выбран ли проект
+    // если выбран проект, проверяем его
 
-    $project_id = false;
-    foreach ($projects as $project) {
-        if ($form_task['project'] == $project['id']) {
-            $project_id = intval($form_task['project']);
+    $project_id = 0;
+    if (!empty($form_task['project'])) {
+        foreach ($projects as $project) {
+            if ($form_task['project'] == $project['id']) {
+                $project_id = intval($form_task['project']);
+            } else {
+                $errors['project'] = 'Такого проекта не существует';
+            }
         }
-    }
-    if (!$project_id) {
-        $errors['project'] = 'Надо выбрать проект';
     }
 
     // проверяем, правильная ли введена дата

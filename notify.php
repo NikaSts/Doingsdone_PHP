@@ -2,7 +2,6 @@
 
 require_once('init.php');
 
-
 $transport = new Swift_SmtpTransport("phpdemo.ru", 25);
 $transport->setUsername("keks@phpdemo.ru");
 $transport->setPassword("htmlacademy");
@@ -41,6 +40,7 @@ if ($res) {
         $text_body = 'У вас запланирована задача: ';
         $date = 'на' . $user['time_limit'];
         $task = '';
+        $message_content = '';
         foreach ($tasks as $task) {
             $message_content = $greeting . #text_body . $task . $date;
                 $message->addPart($message_content, 'text/html');
