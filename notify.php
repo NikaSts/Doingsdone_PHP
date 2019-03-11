@@ -42,7 +42,7 @@ if ($res) {
         $task = '';
         $message_content = '';
         foreach ($tasks as $task) {
-            $message_content = $greeting . #text_body . $task . $date;
+            $message_content = $greeting . $text_body . $task . $date;
                 $message->addPart($message_content, 'text/html');
         }
     }
