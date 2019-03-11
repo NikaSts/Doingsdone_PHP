@@ -38,7 +38,8 @@ if ($res) {
 
         $greeting = 'Уважаемый, ' . $user['name'];
         $text_body = 'У вас запланирована задача: ';
-        $date = 'на' . $user['time_limit'];
+        $date = 'на ' . $user['time_limit'];
+        $tasks = $user['tasks'];
         $task = '';
         $message_content = '';
         foreach ($tasks as $task) {

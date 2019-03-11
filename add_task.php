@@ -13,10 +13,6 @@ if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
 } else {
     $projects = get_projects($connect, $user_id);
-
-    if (isset($_GET['project_id'])) {
-        $project_id = intval($_GET['project_id']);
-    }
 }
 if ($error) {
     $page_content = include_template('error.php', [
@@ -45,13 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $project_id = 0;
     if (!empty($form_task['project'])) {
-        foreach ($projects as $project) {
-            if ($form_task['project'] == $project['id']) {
+            if (In_array($form_task['project'], array_column($projects, 'id'))) {
                 $project_id = intval($form_task['project']);
             } else {
                 $errors['project'] = 'Такого проекта не существует';
             }
-        }
     }
 
     // проверяем, правильная ли введена дата

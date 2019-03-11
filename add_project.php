@@ -12,10 +12,6 @@ if (!$connect) {
     $error = 'Невозможно подключиться к базе данных: ' . mysqli_connect_error();
 } else {
     $projects = get_projects($connect, $user_id);
-
-    if (isset($_GET['project_id'])) {
-        $project_id = intval($_GET['project_id']);
-    }
 }
 
 if ($error) {
