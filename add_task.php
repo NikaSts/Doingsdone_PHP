@@ -41,11 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $project_id = 0;
     if (!empty($form_task['project'])) {
-            if (In_array($form_task['project'], array_column($projects, 'id'))) {
-                $project_id = intval($form_task['project']);
-            } else {
-                $errors['project'] = 'Такого проекта не существует';
-            }
+        if (in_array($form_task['project'], array_column($projects, 'id'))) {
+            $project_id = intval($form_task['project']);
+        } else {
+            $errors['project'] = 'Такого проекта не существует';
+        }
     }
 
     // проверяем, правильная ли введена дата
