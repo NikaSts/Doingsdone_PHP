@@ -25,8 +25,10 @@ if ($res) {
     foreach ($res as $key) {
         $users[$key['id']]['name'] = $key['name'];
         $users[$key['id']]['email'] = $key['email'];
-        $users[$key['id']]['time_limit'] = $key['time_limit'];
-        $users[$key['id']]['tasks'][] = $key['title'];
+        $users[$key['id']]['tasks'][] = [
+            'title' => $key['title'],
+            'time_limit' => $key['time_limit']
+        ];
     }
 
     //перебираем массив подставляя значения в письмо
@@ -36,17 +38,18 @@ if ($res) {
         $message->setFrom(['keks@phpdemo.ru' => 'DoingsDone']);
         $message->setTo($user['email']);
 
-        $greeting = 'Уважаемый, ' . $user['name'];
-        $text_body = 'У вас запланирована задача: ';
-        $date = 'на ' . $user['time_limit'];
-        $tasks = $user['tasks'];
-        $task = '';
-        $message_content = '';
-        foreach ($tasks as $task) {
-            $message_content = $greeting . $text_body . $task . $date;
-                $message->addPart($message_content, 'text/html');
+        $message_content = 'Уважаемый, ' . $user['name'] .'<br>';
+
+        foreach ($user['tasks'] as $task) {
+            $message_content .= 'У вас запланирована задача: ';
+            $message_content .=  $task['title'];
+            $message_content .= ' на ' . date('d.m.Y H:i:s', strtotime($task['time_limit']));
+            $message_content .= '<br>';
         }
+
+        $message->addPart($message_content . '<br>', 'text/html');
     }
+
     $result = $mailer->send($message);
 
     if ($result) {
@@ -55,5 +58,3 @@ if ($res) {
         print("Не удалось отправить рассылку: " . $logger->dump());
     }
 }
-
-
