@@ -14,7 +14,7 @@
         <div class="form__row">
             <label class="form__label" for="project">Проект</label>
             <select class="form__input form__input--select <?= isset($errors['project']) ? " form__input--error" : '' ?>" name="project" id="project">
-                <option>Выберите проект</option>
+                <option value="">Выберите проект</option>
                 <? foreach ($projects as $key => $val): ?>
                 <?
                 $selected_project = 0;
