@@ -16,11 +16,11 @@ if (!$connect) {
     if (isset($_GET['task_id']) && isset($_GET['check'])) {
         if ($task_id = intval($_GET['task_id'])) {
             $task = db_fetch_data($connect, "SELECT now_status FROM tasks WHERE id = ? AND user_id = ?", [$task_id, $user_id]);
-            if (count($task)) {
-                $sql_close_task = "UPDATE tasks SET now_status = ?, is_done = NOW() WHERE id = ?";
-                $status = $task[0]['now_status'] ? '0' : '1';
-                db_insert_data($connect, $sql_close_task, [$status, $task_id]);
-            }
+        }
+        if (count($task)) {
+            $sql_close_task = "UPDATE tasks SET now_status = ?, is_done = NOW() WHERE id = ?";
+            $status = $task[0]['now_status'] ? '0' : '1';
+            db_insert_data($connect, $sql_close_task, [$status, $task_id]);
         }
     }
 
