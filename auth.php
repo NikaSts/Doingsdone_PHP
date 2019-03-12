@@ -30,18 +30,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    if (!isset($errors['email']) && !filter_var($form_auth['email'], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'E-mail введён некорректно';
+    }
+
     $email = $form_auth['email'];
     $sql = 'SELECT * FROM users WHERE email = ?';
     $matchFound = db_fetch_data($connect, $sql, [$email]);
 
+    if (!count($errors) && !$matchFound) {
+        $errors['email'] = 'Пользователя с таким e-mail нет на сайте';
+    }
+        
     if (!count($errors) && $matchFound) {
         if (password_verify($form_auth['password'], $matchFound[0]['password'])) {
             $_SESSION = $matchFound[0];
         } else {
             $errors['password'] = 'Введен неверный пароль';
         }
-    } else {
-        $errors['email'] = 'Пользователя с таким e-mail нет на сайте';
     }
 
     if (count($errors)) {
