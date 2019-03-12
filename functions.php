@@ -34,7 +34,6 @@ function time_counter($date)
     if (!$date) {
         return false;
     }
-
     return time() - strtotime($date) >= 0 ? true : false;
 }
 
@@ -57,7 +56,6 @@ function db_fetch_data($connect, $sql, $data = [])
     return $result;
 }
 
-//Функция для
 /**
  * Добавляет записи в БД
  * @param $connect
@@ -73,6 +71,17 @@ function db_insert_data($connect, $sql, $data = [])
         $result = mysqli_insert_id($connect);
     }
     return $result;
+}
+
+/**
+ * Получает задачи пользователя
+ * @param $connect
+ * @param $user_id
+ * @return array|null
+ */
+function get_projects($connect, $user_id) {
+    $sql_projects = 'SELECT *, (SELECT COUNT(*) FROM tasks as t WHERE t.project_id=projects.id) as cnt FROM projects WHERE user_id = ?';
+    return db_fetch_data($connect, $sql_projects, [$user_id]);
 }
 
 /**
