@@ -58,7 +58,7 @@
                             }
                             ?>
                             <? foreach ($projects as $key => $val): ?>
-                                <li class="main-navigation__list-item<?=$val['id'] == $project_id ? ' main-navigation__list-item--active':''?>">
+                                <li class="main-navigation__list-item<?=$val['id'] === $project_id ? ' main-navigation__list-item--active':''?>">
                                     <a class="main-navigation__list-item-link"
                                        href="/index.php?project_id=<?= $val['id'] ?>"><?= $val['name']; ?></a>
                                     <span class="main-navigation__list-item-count"><?= $val['cnt']; ?></span>

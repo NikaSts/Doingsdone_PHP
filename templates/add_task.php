@@ -19,10 +19,10 @@
                 <?
                 $selected_project = 0;
                 if (isset($_POST['project'])) {
-                    intval($_POST['project']);
+                    $selected_project = intval($_POST['project']);
                 }
                 ?>
-                <option value="<?= ($val['id']); ?>"<?= $val['id'] == $selected_project ? ' selected' : '' ?>>
+                <option value="<?= ($val['id']); ?>"<?= $val['id'] === $selected_project ? ' selected' : '' ?>>
                     <?= esc($val['name']); ?>
                 </option>
                 <? endforeach; ?>
