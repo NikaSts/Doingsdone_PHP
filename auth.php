@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!count($errors) && !$matchFound) {
         $errors['email'] = 'Пользователя с таким e-mail нет на сайте';
     }
-        
+
     if (!count($errors) && $matchFound) {
         if (password_verify($form_auth['password'], $matchFound[0]['password'])) {
             $_SESSION = $matchFound[0];
