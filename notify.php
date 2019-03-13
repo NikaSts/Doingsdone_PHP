@@ -43,7 +43,7 @@ if ($res) {
         foreach ($user['tasks'] as $task) {
             $message_content .= 'У вас запланирована задача: ';
             $message_content .=  $task['title'];
-            $message_content .= ' на ' . date('d.m.Y H:i:s', strtotime($task['time_limit']));
+            $message_content .= ' на ' . date('d.m.Y', strtotime($task['time_limit']));
             $message_content .= '<br>';
         }
 
