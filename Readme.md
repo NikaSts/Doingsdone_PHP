@@ -1,3 +1,4 @@
+Graduation project in PHP programming
 # Личный проект «Дела в Порядке»
 
 * Студент: [Вероника Стасюк](https://up.htmlacademy.ru/php/8/user/501771).
